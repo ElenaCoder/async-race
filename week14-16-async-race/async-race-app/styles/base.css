@@ -1,0 +1,41 @@
+:root {
+--black: black;
+--white : white;
+
+--yellow: #eeb90c;
+--yellow-hovered: #e2af08;
+--yellow-active: #ac8403;
+
+--light-gray:#a5a4a4;
+--gray:#8f8d8d;
+--dark-gray:#5d6163;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    background-color: var(--black);
+    color: var(--white );
+
+  }
+  
+  /* Utility */
+  .none {
+    display: none !important;
+  }
+  
+  /* Search engines will be able to see the elements with this tag,
+  but it will be hidden from our eyes */
+  .visually-hidden {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    width: 0px;
+    height: 0px;
+    display: block;
+    margin-left: -10000px;
+    background: transparent;
+    font-size: 0;
+  }
+  
