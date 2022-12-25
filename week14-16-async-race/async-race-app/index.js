@@ -10,6 +10,22 @@ async function getDataFromDB(url){
     }
 }
 
+async function postDataToDB(url, bodyStr){
+    let response = await fetch(url, {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: bodyStr
+    });
+    if(response.ok){
+        return  response.json(); // if the HTTP status code is 200-299
+    } else {
+        // console.log('Not successful');
+        error => console.log('Error')
+    }
+}
+
 
 
 
@@ -372,11 +388,17 @@ btnToWinners.addEventListener('click', () => {
 /*//Toggling between GARAGE and  TO WINNERS view*/
 
 
+
 /*Car rendering in Garage view from DB*/
 async function renderCarsInGarage(){
 
     let url = 'http://127.0.0.1:3000/garage';
     let carsInGarageArr = await getDataFromDB(url);
+
+    let trackBlockList = document.getElementsByClassName('track-block');
+    while(trackBlockList.length > 0){
+        trackBlockList[0].parentNode.removeChild(trackBlockList[0]);
+    }
 
     let fragmentCarBlock = document.createDocumentFragment();
 
@@ -492,10 +514,36 @@ async function renderCarsInGarage(){
         renderCarTrack(elem, divCarBlock);
     })
 
+
     document.getElementsByClassName('page-garage')[0].after(fragmentCarBlock);
 }
 renderCarsInGarage();
 /*//Car rendering in Garage view from DB*/
+
+/*Car creating by clicking button Create in Garage view*/
+let createBtn = document.getElementsByClassName('create')[0];
+createBtn.addEventListener('click', createNewCarHandler);
+
+async function createNewCarHandler(event){
+    let formCreate = document.getElementsByClassName('form-create')[0];
+    let newCarName = formCreate.getElementsByClassName('input-text')[0].value;
+    let newCarColor = formCreate.getElementsByClassName('input-color')[0].value;
+
+    // let urlGET = 'http://127.0.0.1:3000/garage';
+
+    // let currentCarsArrinDB = await getDataFromDB(urlGET);
+    // let newCarId = currentCarsArrinDB.length;
+
+    let urlPOST = `http://127.0.0.1:3000/garage`;
+    let bodyStr = JSON.stringify({name: `${newCarName}`, color: `${newCarColor}`});
+
+    let newCar = await postDataToDB(urlPOST, bodyStr);
+    console.log(newCar);
+    await renderCarsInGarage();
+
+
+}
+/*//Car creating by clicking button Create in Garage view*/
 
 /*Rendering amount of cars in the GARAGE in Garage view*/
 async function renderCarAmountInGarage(){
