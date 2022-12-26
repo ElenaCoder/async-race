@@ -183,6 +183,10 @@ tbody tr{
     padding: 0.5rem 0.5rem 0;
 }
 
+.selected{
+    background-color: #222222;
+}
+
 .block-nav{
     display: flex;
     flex-direction: row;

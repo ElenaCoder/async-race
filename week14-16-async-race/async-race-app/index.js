@@ -26,6 +26,22 @@ async function postDataToDB(url, bodyStr){
     }
 }
 
+async function putDataToDB(url, bodyStr){
+    let response = await fetch(url, {
+        method: 'PUT',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: bodyStr
+    });
+    if(response.ok){
+        return  response.json(); // if the HTTP status code is 200-299
+    } else {
+        // console.log('Not successful');
+        error => console.log('Error')
+    }
+}
+
 
 
 
@@ -91,6 +107,7 @@ function getFormCreateFragment(){
     let inputTextFormCreate = document.createElement("input");
     inputTextFormCreate.setAttribute('type', 'text');
     inputTextFormCreate.setAttribute('value', '');
+    // inputTextFormCreate.setAttribute('required', '');
     inputTextFormCreate.classList = 'input-text';
     formCreate.append(inputTextFormCreate);
 
@@ -388,21 +405,80 @@ async function createNewCarHandler(event){
     let newCarName = formCreate.getElementsByClassName('input-text')[0].value;
     let newCarColor = formCreate.getElementsByClassName('input-color')[0].value;
 
-    // let urlGET = 'http://127.0.0.1:3000/garage';
+    if(newCarName){
+        let urlPOST = `http://127.0.0.1:3000/garage`;
+        let bodyStr = JSON.stringify({name: `${newCarName}`, color: `${newCarColor}`});
 
-    // let currentCarsArrinDB = await getDataFromDB(urlGET);
-    // let newCarId = currentCarsArrinDB.length;
-
-    let urlPOST = `http://127.0.0.1:3000/garage`;
-    let bodyStr = JSON.stringify({name: `${newCarName}`, color: `${newCarColor}`});
-
-    let newCar = await postDataToDB(urlPOST, bodyStr);
-    console.log(newCar);
-    await renderCarsInGarage();
-
-
+        let newCar = await postDataToDB(urlPOST, bodyStr);
+        console.log(newCar);await fetch
+        await renderCarsInGarage();
+    }
 }
 /*//Car creating by clicking button Create in Garage view*/
+
+
+/*Car undating by clicking button UPDATE in Garage view*/
+async function renderUpdatedCarInGarage(){
+    await renderCarsInGarage();
+
+    let selectCarBtns = document.getElementsByClassName('select');
+    // console.log(selectCarBtns);
+
+    Array.from(selectCarBtns).forEach(btn =>{
+        btn.addEventListener('click', function updateSelectedCarHandler(){
+            let trackBlock = btn.parentNode.parentNode;
+
+            function renderHighlightedTrackBlock(elem){
+                let allTrackBlocks = document.getElementsByClassName('track-block');
+                Array.from(allTrackBlocks).forEach(el => el.classList.contains('selected')? el.classList.remove('selected'): 1);
+                elem.parentNode.parentNode.classList.add('selected')
+            }
+            renderHighlightedTrackBlock(btn);
+
+
+            let selectedCarName = btn.parentNode.getElementsByClassName('car-name')[0].innerHTML;
+            let selectedCarColor = btn.parentNode.parentNode.getElementsByTagName('path')[0].getAttribute('fill');
+
+            let inputUpdateNameElem = document.getElementsByClassName('input-text')[1];
+            inputUpdateNameElem.setAttribute('value',`${selectedCarName}`);
+            let inputUpdateNameColorElem = document.getElementsByClassName('input-color')[1];
+            inputUpdateNameColorElem.setAttribute('value',`${selectedCarColor}`);
+        });
+    })
+}
+renderUpdatedCarInGarage();
+
+let updateBtn = document.getElementsByClassName('update')[0];
+updateBtn.addEventListener('click', updateSelectedCarHandler);
+
+async function updateSelectedCarHandler(event){
+        console.log(document.getElementsByClassName('selected'));
+
+        if(document.getElementsByClassName('selected').length){
+            let currentInputUpdateNameElem = document.getElementsByClassName('input-text')[1];
+            let currentCarName = currentInputUpdateNameElem.value;
+            // btn.parentNode.parentNode.getElementsByTagName('path')[0].setAttribute('value'`${currentCarName}`);
+            console.log(currentCarName);
+            // Post request and rendering all cars including updated one
+            let currentInputUpdateColorElem = document.getElementsByClassName('input-color')[1];
+            let currentCarColor = currentInputUpdateColorElem.value;
+            console.log(currentCarColor);
+            let currentCarId = document.getElementsByClassName('selected')[0].getAttribute('id');
+            console.log(currentCarId);
+
+            let urlPut = `http://127.0.0.1:3000//garage/:${currentCarId}`;
+            let bodyStr = JSON.stringify({name: `${currentCarName}`, color: `${currentCarColor}`});
+
+            let updatedCar = await putDataToDB(urlPut, bodyStr);
+            console.log('updatedCar', updatedCar);
+            await renderCarsInGarage();
+
+        } else{
+            alert('Please select the car you want to update.');
+        }
+}
+/*//Car undating by clicking button UPDATE in Garage view*/
+
 
 /*Rendering amount of cars in the GARAGE in Garage view*/
 async function renderCarAmountInGarage(){
@@ -550,7 +626,7 @@ renderWinnersAmount();
 async function renderWinnersInTable(){
     let url = 'http://127.0.0.1:3000/winners';
     let carsInGarageArr = await getDataFromDB(url);
-    console.log(carsInGarageArr);
+    // console.log(carsInGarageArr);
 
     let fragmentCarRowInTable = document.createDocumentFragment();
     let tbody = document.getElementsByClassName('tbody')[0];
