@@ -26,21 +26,21 @@ async function postDataToDB(url, bodyStr){
     }
 }
 
-async function putDataToDB(url, bodyStr){
-    let response = await fetch(url, {
-        method: 'PUT',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: bodyStr
-    });
-    if(response.ok){
-        return  response.json(); // if the HTTP status code is 200-299
-    } else {
-        // console.log('Not successful');
-        error => console.log('Error')
-    }
-}
+// async function putDataToDB(url, bodyStr){
+//     let response = await fetch(url, {
+//         method: 'PUT',
+//         headers:{
+//             'Content-Type': 'application/json'
+//         },
+//         body: bodyStr
+//     });
+//     if(response.ok){
+//         return  response.json(); // if the HTTP status code is 200-299
+//     } else {
+//         // console.log('Not successful');
+//         error => console.log('Error')
+//     }
+// }
 
 
 
@@ -466,12 +466,12 @@ async function updateSelectedCarHandler(event){
             let currentCarId = document.getElementsByClassName('selected')[0].getAttribute('id');
             console.log(currentCarId);
 
-            let urlPut = `http://127.0.0.1:3000//garage/:${currentCarId}`;
-            let bodyStr = JSON.stringify({name: `${currentCarName}`, color: `${currentCarColor}`});
+            // let urlPut = `http://127.0.0.1:3000//garage/:${currentCarId}`;
+            // let bodyStr = JSON.stringify({name: `${currentCarName}`, color: `${currentCarColor}`});
 
-            let updatedCar = await putDataToDB(urlPut, bodyStr);
-            console.log('updatedCar', updatedCar);
-            await renderCarsInGarage();
+            // let updatedCar = await putDataToDB(urlPut, bodyStr);
+            // console.log('updatedCar', updatedCar);
+            // await renderCarsInGarage();
 
         } else{
             alert('Please select the car you want to update.');
