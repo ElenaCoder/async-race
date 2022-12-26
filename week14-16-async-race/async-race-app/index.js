@@ -67,7 +67,7 @@ let navigationMenu = getNavigationMenu();
 document.body.append(navigationMenu);
 
 
-/*---GARAGE view---*/
+/*------------------GARAGE view------------------------*/
 function getGarageViewContent(){
     const fragmentGarageViewContent = document.createDocumentFragment();
 
@@ -244,151 +244,10 @@ function getPaginationNavigationGarage(){
 
 let paginationNavigationGarage = getPaginationNavigationGarage();
 document.getElementsByClassName('garage-content')[0].append(paginationNavigationGarage);
-/*---//GARAGE view---*/
-
-
-/*---TO WINNERS view---*/
-function getWinnersViewContent(){
-    const fragmentWinnersViewContent = document.createDocumentFragment();
-
-    let divWinnersViewContent = document.createElement('div');
-    divWinnersViewContent.className = 'winners-content hide';
-    fragmentWinnersViewContent.append(divWinnersViewContent)
-
-    return fragmentWinnersViewContent;
-}
-
-let winnersViewContent = getWinnersViewContent();
-document.body.append(winnersViewContent);
-
-function getWinnersPageInfoFragment(){
-    const fragmentWinnersPageInfo = document.createDocumentFragment();
-
-    let divWinners = document.createElement("div");
-    divWinners.className ='winners';
-    divWinners.innerHTML ='Winners (<span class="winners-amount"> 0 </span>)';
-    fragmentWinnersPageInfo.append(divWinners);
-
-    let divPageWinners = document.createElement("div");
-    divPageWinners.className ='page-winners';
-    divPageWinners.innerHTML ='Page #<span class="page-number">1</span>';
-    fragmentWinnersPageInfo.append(divPageWinners);
-
-    return fragmentWinnersPageInfo;
-}
-
-let pageWinnersInfoFragment = getWinnersPageInfoFragment();
-document.getElementsByClassName('winners-content')[0].append(pageWinnersInfoFragment);
-
-function getTableOfWinners(){
-    let fragmentTableOfWinners = document.createDocumentFragment();
-
-    let table = document.createElement('table');
-    table.className = 'table-winners';
-    fragmentTableOfWinners.append(table);
-
-    let thead = document.createElement('thead');
-    thead.className = 'thead';
-    table.append(thead);
-
-    let tbody = document.createElement('tbody');
-    tbody.className = 'tbody';
-    table.append(tbody);
-
-    let tr = document.createElement('tr');
-    tr.className = 'tr-header';
-    thead.append(tr);
-
-    let thNumber = document.createElement('th');
-    thNumber.className = 'th-number';
-    thNumber.innerHTML = 'Number';
-    tr.append(thNumber);
-
-    let thCar = document.createElement('th');
-    thCar.className = 'th-car';
-    thCar.innerHTML = 'Car';
-    tr.append(thCar);
-
-    let thName = document.createElement('th');
-    thName.className = 'th-Name';
-    thName.innerHTML = 'Name';
-    tr.append(thName);
-
-    let thWins = document.createElement('th');
-    thWins.className = 'th-Wins';
-    thWins.innerHTML = 'Wins';
-    tr.append(thWins);
-
-    let thBestTime = document.createElement('th');
-    thBestTime.className = 'th-BestTime';
-    thBestTime.innerHTML = 'BestTime';
-    tr.append(thBestTime);
-
-    return fragmentTableOfWinners;
-}
-
-let tableOfWinnersFragment = getTableOfWinners();
-document.getElementsByClassName('winners-content')[0].append(tableOfWinnersFragment);
-
-function getPaginationNavigationWinners(){
-    const fragmentPaginationNavigationWinners = document.createDocumentFragment();
-
-    let divPaginationNavigationWinners = document.createElement('div');
-    divPaginationNavigationWinners.className = 'pagination-navigation';
-    fragmentPaginationNavigationWinners.append(divPaginationNavigationWinners);
-
-    let btnToPrev = document.createElement('div');
-    btnToPrev.className = 'to-prev button gray';
-    let linkToPrev = document.createElement('a');
-    linkToPrev.className = 'button-gray';
-    linkToPrev.setAttribute('href', '#');
-    linkToPrev.innerHTML = 'prev';
-    btnToPrev.prepend(linkToPrev);
-    divPaginationNavigationWinners.append(btnToPrev);
-
-
-    let btnToNext = document.createElement('div');
-    btnToNext.className = 'to-next button gray';
-    let linkToNext = document.createElement('a');
-    linkToNext.className = 'button-gray';
-    linkToNext.setAttribute('href', '#');
-    linkToNext.innerHTML = 'next';
-    btnToNext.prepend(linkToNext);
-    divPaginationNavigationWinners.append(btnToNext);
-
-    return fragmentPaginationNavigationWinners;
-}
-
-let paginationNavigationWinners = getPaginationNavigationWinners();
-document.getElementsByClassName('winners-content')[0].append(paginationNavigationWinners);
-
-/*---//TO WINNERS view---*/
 
 
 
-
-
-/*Toggling between GARAGE content and  TO WINNERS content view*/
-let btnToGarage = document.getElementsByClassName("to-garage button")[0];
-let btnToWinners = document.getElementsByClassName("to-winners button")[0];
-
-btnToGarage.addEventListener('click', () => {
-    if(document.getElementsByClassName('garage-content')[0].classList.contains("hide")){
-        document.getElementsByClassName('garage-content')[0].classList.remove("hide");
-    }
-    document.getElementsByClassName('winners-content')[0].classList.add("hide");
-})
-
-btnToWinners.addEventListener('click', () => {
-    if(document.getElementsByClassName('winners-content')[0].classList.contains("hide")){
-        document.getElementsByClassName('winners-content')[0].classList.remove("hide");
-    }
-    document.getElementsByClassName('garage-content')[0].classList.add("hide");
-})
-/*//Toggling between GARAGE and  TO WINNERS view*/
-
-
-
+            /*GARAGE VIEW - RENDERING */
 /*Car rendering in Garage view from DB*/
 async function renderCarsInGarage(){
 
@@ -554,7 +413,129 @@ async function renderCarAmountInGarage(){
 }
 renderCarAmountInGarage();
 /*//Rendering amount of cars in the GARAGE in Garage view*/
+            /*//GARAGE VIEW - RENDERING */
 
+/*----------------//GARAGE view--------------------*/
+
+
+
+
+/*----------------WINNERS view--------------------*/
+function getWinnersViewContent(){
+    const fragmentWinnersViewContent = document.createDocumentFragment();
+
+    let divWinnersViewContent = document.createElement('div');
+    divWinnersViewContent.className = 'winners-content hide';
+    fragmentWinnersViewContent.append(divWinnersViewContent)
+
+    return fragmentWinnersViewContent;
+}
+
+let winnersViewContent = getWinnersViewContent();
+document.body.append(winnersViewContent);
+
+function getWinnersPageInfoFragment(){
+    const fragmentWinnersPageInfo = document.createDocumentFragment();
+
+    let divWinners = document.createElement("div");
+    divWinners.className ='winners';
+    divWinners.innerHTML ='Winners (<span class="winners-amount"> 0 </span>)';
+    fragmentWinnersPageInfo.append(divWinners);
+
+    let divPageWinners = document.createElement("div");
+    divPageWinners.className ='page-winners';
+    divPageWinners.innerHTML ='Page #<span class="page-number">1</span>';
+    fragmentWinnersPageInfo.append(divPageWinners);
+
+    return fragmentWinnersPageInfo;
+}
+
+let pageWinnersInfoFragment = getWinnersPageInfoFragment();
+document.getElementsByClassName('winners-content')[0].append(pageWinnersInfoFragment);
+
+function getTableOfWinners(){
+    let fragmentTableOfWinners = document.createDocumentFragment();
+
+    let table = document.createElement('table');
+    table.className = 'table-winners';
+    fragmentTableOfWinners.append(table);
+
+    let thead = document.createElement('thead');
+    thead.className = 'thead';
+    table.append(thead);
+
+    let tbody = document.createElement('tbody');
+    tbody.className = 'tbody';
+    table.append(tbody);
+
+    let tr = document.createElement('tr');
+    tr.className = 'tr-header';
+    thead.append(tr);
+
+    let thNumber = document.createElement('th');
+    thNumber.className = 'th-number';
+    thNumber.innerHTML = 'Number';
+    tr.append(thNumber);
+
+    let thCar = document.createElement('th');
+    thCar.className = 'th-car';
+    thCar.innerHTML = 'Car';
+    tr.append(thCar);
+
+    let thName = document.createElement('th');
+    thName.className = 'th-Name';
+    thName.innerHTML = 'Name';
+    tr.append(thName);
+
+    let thWins = document.createElement('th');
+    thWins.className = 'th-Wins';
+    thWins.innerHTML = 'Wins';
+    tr.append(thWins);
+
+    let thBestTime = document.createElement('th');
+    thBestTime.className = 'th-BestTime';
+    thBestTime.innerHTML = 'BestTime';
+    tr.append(thBestTime);
+
+    return fragmentTableOfWinners;
+}
+
+let tableOfWinnersFragment = getTableOfWinners();
+document.getElementsByClassName('winners-content')[0].append(tableOfWinnersFragment);
+
+function getPaginationNavigationWinners(){
+    const fragmentPaginationNavigationWinners = document.createDocumentFragment();
+
+    let divPaginationNavigationWinners = document.createElement('div');
+    divPaginationNavigationWinners.className = 'pagination-navigation';
+    fragmentPaginationNavigationWinners.append(divPaginationNavigationWinners);
+
+    let btnToPrev = document.createElement('div');
+    btnToPrev.className = 'to-prev button gray';
+    let linkToPrev = document.createElement('a');
+    linkToPrev.className = 'button-gray';
+    linkToPrev.setAttribute('href', '#');
+    linkToPrev.innerHTML = 'prev';
+    btnToPrev.prepend(linkToPrev);
+    divPaginationNavigationWinners.append(btnToPrev);
+
+
+    let btnToNext = document.createElement('div');
+    btnToNext.className = 'to-next button gray';
+    let linkToNext = document.createElement('a');
+    linkToNext.className = 'button-gray';
+    linkToNext.setAttribute('href', '#');
+    linkToNext.innerHTML = 'next';
+    btnToNext.prepend(linkToNext);
+    divPaginationNavigationWinners.append(btnToNext);
+
+    return fragmentPaginationNavigationWinners;
+}
+
+let paginationNavigationWinners = getPaginationNavigationWinners();
+document.getElementsByClassName('winners-content')[0].append(paginationNavigationWinners);
+
+            /*WINNNERS VIEW - RENDERING */
 /*Rendering amount of winners in the WINNERS view*/
 async function renderWinnersAmount(){
     let url = 'http://127.0.0.1:3000/winners';
@@ -625,3 +606,29 @@ async function renderWinnersInTable(){
 }
 renderWinnersInTable()
 /*//Car rendering in Winners view from DB*/
+            /*//WINNNERS VIEW - RENDERING */
+
+/*---------------//WINNERS view----------------------*/
+
+
+
+
+
+/*Toggling between GARAGE and WINNERS views*/
+let btnToGarage = document.getElementsByClassName("to-garage button")[0];
+let btnToWinners = document.getElementsByClassName("to-winners button")[0];
+
+btnToGarage.addEventListener('click', () => {
+    if(document.getElementsByClassName('garage-content')[0].classList.contains("hide")){
+        document.getElementsByClassName('garage-content')[0].classList.remove("hide");
+    }
+    document.getElementsByClassName('winners-content')[0].classList.add("hide");
+})
+
+btnToWinners.addEventListener('click', () => {
+    if(document.getElementsByClassName('winners-content')[0].classList.contains("hide")){
+        document.getElementsByClassName('winners-content')[0].classList.remove("hide");
+    }
+    document.getElementsByClassName('garage-content')[0].classList.add("hide");
+})
+/*//Toggling between GARAGE and WINNERS views*/
