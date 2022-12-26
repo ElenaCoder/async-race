@@ -410,7 +410,7 @@ async function createNewCarHandler(event){
         let bodyStr = JSON.stringify({name: `${newCarName}`, color: `${newCarColor}`});
 
         let newCar = await postDataToDB(urlPOST, bodyStr);
-        console.log(newCar);await fetch
+        console.log(newCar);
         await renderCarsInGarage();
     }
 }
