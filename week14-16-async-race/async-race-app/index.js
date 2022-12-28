@@ -42,6 +42,22 @@ async function putDataToDB(url, bodyStr){
     }
 }
 
+async function deleteDataFromDB(url, bodyStr){
+    let response = await fetch(url, {
+        method: 'DELETE',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: bodyStr
+    });
+    if(response.ok){
+        return  response.json(); // if the HTTP status code is 200-299
+    } else {
+        // console.log('Not successful');
+        error => console.log('Error')
+    }
+}
+
 
 
 
@@ -221,7 +237,7 @@ function getGaragePageInfoFragment(){
 
     let divPage = document.createElement("div");
     divPage.className ='page-garage';
-    divPage.innerHTML ='Page #<span class="page-number">1</span>';
+    divPage.innerHTML ='Page #<span class="page-number"></span>';
     fragmentGaragePageInfo.append(divPage);
 
     return fragmentGaragePageInfo;
@@ -276,19 +292,21 @@ async function renderCarsInGarage(){
         trackBlockList[0].parentNode.removeChild(trackBlockList[0]);
     }
 
-    let fragmentCarBlock = document.createDocumentFragment();
+    let fragmentCarsBlock = document.createDocumentFragment();
 
-    carsInGarageArr.forEach(elem =>{
+    carsInGarageArr.reverse().forEach(elem =>{
+        let fragmentCarBlock = document.createDocumentFragment();
+
         let divCarBlock = document.createElement('div');
         divCarBlock.className = 'track-block';
         divCarBlock.id = `${elem.id}`;
         fragmentCarBlock.append(divCarBlock);
 
-        function renderNavigationInCarBlock(elem, node){
+        function createNavigationInCarBlockFragment(elem,node){
 
             let divBlockNavigation = document.createElement('div');
             divBlockNavigation.className = 'block-nav';
-            divCarBlock.append(divBlockNavigation);
+            node.append(divBlockNavigation);
 
             let btnSelect = document.createElement('div');
             btnSelect.className = 'select button gray';
@@ -316,7 +334,7 @@ async function renderCarsInGarage(){
 
             let divBlockControlPanel = document.createElement('div');
             divBlockControlPanel.className = 'control-panel';
-            divCarBlock.append(divBlockControlPanel);
+            node.append(divBlockControlPanel);
 
             let btnStart = document.createElement('div');
             btnStart.className = 'button yellow small';
@@ -335,14 +353,14 @@ async function renderCarsInGarage(){
             linkStop.innerHTML = '&#9724;';
             btnStop.prepend(linkStop);
             divBlockControlPanel.append(btnStop);
-
-            node.after(fragmentCarBlock);
         }
-        renderNavigationInCarBlock(elem, document.getElementsByClassName('page-garage')[0]);
+        createNavigationInCarBlockFragment(elem, divCarBlock);
 
-        function renderCarTrack(elem, node) {
+        function createCarTrack(elem, node) {
+
             let divBlockCarTrack = document.createElement('div');
             divBlockCarTrack.className = 'car-track';
+            node.append(divBlockCarTrack);
 
             // Create an element within the svg - namespace (NS)
             let carIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -384,16 +402,75 @@ async function renderCarsInGarage(){
             flagIcon.setAttribute('src', './asset/flag.svg');
             flagIcon.setAttribute('alt', 'Flag image');
             divBlockCarTrack.append(flagIcon);
-
-            return node.append(divBlockCarTrack);
         }
-        renderCarTrack(elem, divCarBlock);
+        createCarTrack(elem, divCarBlock);
+
+        let selectBtn = divCarBlock.getElementsByClassName('select button')[0];
+        let removeBtn = divCarBlock.getElementsByClassName('remove button')[0];
+        selectBtn.addEventListener('click', selectBtnClickHandling);
+        removeBtn.addEventListener('click', removetBtnClickHandling);
+
+        fragmentCarsBlock.append(fragmentCarBlock);
     })
 
-    document.getElementsByClassName('page-garage')[0].after(fragmentCarBlock);
+    document.getElementsByClassName('page-garage')[0].after(fragmentCarsBlock);
 }
 renderCarsInGarage();
 /*//Car rendering in Garage view from DB*/
+
+/*selectBtnClickHandling callback*/
+function selectBtnClickHandling(event){
+    let selectBtn = event.currentTarget;
+    function renderHighlightedTrackBlock(elem){
+        let allTrackBlocks = document.getElementsByClassName('track-block');
+        Array.from(allTrackBlocks).forEach(el => el.classList.contains('selected')? el.classList.remove('selected'): 1);
+        elem.parentNode.parentNode.classList.add('selected')
+    }
+    renderHighlightedTrackBlock(selectBtn);
+
+
+    let selectedCarName = selectBtn.parentNode.parentNode.getElementsByClassName('car-name')[0].innerHTML;
+    let selectedCarColor = selectBtn.parentNode.parentNode.getElementsByTagName('path')[0].getAttribute('fill');
+
+    let inputUpdateNameElem = document.getElementsByClassName('input-text')[1];
+    inputUpdateNameElem.value = `${selectedCarName}`;
+    let inputUpdateNameColorElem = document.getElementsByClassName('input-color')[1];
+    inputUpdateNameColorElem.value = `${selectedCarColor}`;
+}
+/*//selectBtnClickHandling callback*/
+
+/*selectBtnClickHandling callback*/
+function removetBtnClickHandling(event){
+    let removeBtn = event.currentTarget;
+    let carBlockElem = removeBtn.parentNode.parentNode;
+    let currentCarId = carBlockElem.getAttribute('id')
+    let currentCarName = carBlockElem.getElementsByClassName('car-name')[0].innerHTML;
+    let currentCarColor = carBlockElem.getElementsByTagName('path')[0].getAttribute('fill');
+
+    let urlDeleteFromGarage = `http://127.0.0.1:3000/garage/${currentCarId}`;
+    let urlDeleteFromTableWinners = `http://127.0.0.1:3000/winners/${currentCarId}`;
+    let bodyStr = JSON.stringify({name: `${currentCarName}`, color: `${currentCarColor}`});
+
+
+
+    function isCurrentCarInWinnersTable(carId){
+        let result = false;
+        let winnerRowArr = Array.from(document.getElementsByClassName('th-number'));
+        winnerRowArr.forEach(elem => elem.innerHTML === carId ? result=true : result=false);
+        return result;
+    }
+
+    if(isCurrentCarInWinnersTable(currentCarId)) deleteDataFromDB(urlDeleteFromTableWinners, bodyStr);
+
+
+    deleteDataFromDB(urlDeleteFromGarage, bodyStr);
+    // deleteDataFromDB(urlDeleteFromTableWinners, bodyStr);
+    renderCarAmountInGarage();
+    renderCarsInGarage();
+    renderCarAmountInWinnersTable();
+    renderWinnersInTable();
+}
+/*//selectBtnClickHandling callback*/
 
 /*Car creating by clicking button CREATE in Garage view*/
 let createBtn = document.getElementsByClassName('create')[0];
@@ -413,7 +490,6 @@ async function createNewCarHandler(event){
         renderUpdatedCarInGarage();
     }
     renderCarAmountInGarage();
-
 }
 /*//Car creating by clicking button CREATE in Garage view*/
 
@@ -447,7 +523,7 @@ async function renderUpdatedCarInGarage(){
         });
     })
 }
-renderUpdatedCarInGarage();
+// renderUpdatedCarInGarage();
 
 let updateBtn = document.getElementsByClassName('update')[0];
 updateBtn.addEventListener('click', updateSelectedCarHandler);
@@ -511,7 +587,7 @@ function getWinnersPageInfoFragment(){
 
     let divWinners = document.createElement("div");
     divWinners.className ='winners';
-    divWinners.innerHTML ='Winners (<span class="winners-amount"> 0 </span>)';
+    divWinners.innerHTML ='Winners (<span class="winners-amount"></span>)';
     fragmentWinnersPageInfo.append(divWinners);
 
     let divPageWinners = document.createElement("div");
@@ -620,6 +696,11 @@ renderWinnersAmount();
 
 /*Car rendering in Winners view from DB*/
 async function renderWinnersInTable(){
+    let winnersRows = document.getElementsByClassName('tr-row');
+    while(winnersRows.length > 0){
+        winnersRows[0].parentNode.removeChild(winnersRows[0]);
+    }
+
     let url = 'http://127.0.0.1:3000/winners';
     let carsInGarageArr = await getDataFromDB(url);
     // console.log(carsInGarageArr);
@@ -676,8 +757,20 @@ async function renderWinnersInTable(){
     })
     tbody.append(fragmentCarRowInTable);
 }
-renderWinnersInTable()
+
+renderWinnersInTable();
+
 /*//Car rendering in Winners view from DB*/
+
+/*Rendering amount of cars in the table of the WINNERS view*/
+async function renderCarAmountInWinnersTable(){
+    let url = 'http://127.0.0.1:3000/winners';
+    let winnersInTableArr = await getDataFromDB(url);
+    let winnersAmount = winnersInTableArr.length;
+    document.getElementsByClassName('winners-amount')[0].innerHTML = winnersAmount;
+}
+renderCarAmountInWinnersTable();
+/*//Rendering amount of cars in the table of the WINNERS view*/
             /*//WINNNERS VIEW - RENDERING */
 
 /*---------------//WINNERS view----------------------*/
