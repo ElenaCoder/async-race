@@ -5,7 +5,6 @@ async function getDataFromDB(url){
     if(response.ok){
         return  response.json(); // if the HTTP status code is 200-299
     } else {
-        // console.log('Not successful');
         error => console.log('Error')
     }
 }
@@ -21,7 +20,6 @@ async function postDataToDB(url, bodyStr){
     if(response.ok){
         return  response.json(); // if the HTTP status code is 200-299
     } else {
-        // console.log('Not successful');
         error => console.log('Error')
     }
 }
@@ -37,7 +35,6 @@ async function putDataToDB(url, bodyStr){
     if(response.ok){
         return  response.json(); // if the HTTP status code is 200-299
     } else {
-        // console.log('Not successful');
         error => console.log('Error')
     }
 }
@@ -53,7 +50,6 @@ async function deleteDataFromDB(url, bodyStr){
     if(response.ok){
         return  response.json(); // if the HTTP status code is 200-299
     } else {
-        // console.log('Not successful');
         error => console.log('Error')
     }
 }
