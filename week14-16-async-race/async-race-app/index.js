@@ -291,12 +291,10 @@ async function renderCarsInGarage(){
     let fragmentCarsBlock = document.createDocumentFragment();
 
     carsInGarageArr.reverse().forEach(elem =>{
-        let fragmentCarBlock = document.createDocumentFragment();
-
         let divCarBlock = document.createElement('div');
         divCarBlock.className = 'track-block';
         divCarBlock.id = `${elem.id}`;
-        fragmentCarBlock.append(divCarBlock);
+        fragmentCarsBlock.append(divCarBlock);
 
         function createNavigationInCarBlockFragment(elem,node){
 
@@ -405,8 +403,6 @@ async function renderCarsInGarage(){
         let removeBtn = divCarBlock.getElementsByClassName('remove button')[0];
         selectBtn.addEventListener('click', selectBtnClickHandling);
         removeBtn.addEventListener('click', removetBtnClickHandling);
-
-        fragmentCarsBlock.append(fragmentCarBlock);
     })
 
     document.getElementsByClassName('page-garage')[0].after(fragmentCarsBlock);
@@ -436,7 +432,7 @@ function selectBtnClickHandling(event){
 /*//selectBtnClickHandling callback*/
 
 /*removetBtnClickHandling callback*/
-function removetBtnClickHandling(event){
+async function removetBtnClickHandling(event){
     let removeBtn = event.currentTarget;
     let carBlockElem = removeBtn.parentNode.parentNode;
     let currentCarId = carBlockElem.getAttribute('id')
@@ -456,7 +452,7 @@ function removetBtnClickHandling(event){
         return result;
     }
 
-    if(isCurrentCarInWinnersTable(currentCarId)) deleteDataFromDB(urlDeleteFromTableWinners, bodyStr);
+    if(isCurrentCarInWinnersTable(currentCarId)) await deleteDataFromDB(urlDeleteFromTableWinners, bodyStr);
 
 
     deleteDataFromDB(urlDeleteFromGarage, bodyStr);
@@ -482,7 +478,6 @@ async function createNewCarHandler(event){
         let bodyStr = JSON.stringify({name: `${newCarName}`, color: `${newCarColor}`});
 
         let newCar = await postDataToDB(urlPOST, bodyStr);
-        console.log(newCar);
         renderUpdatedCarInGarage();
     }
     renderCarAmountInGarage();
@@ -545,8 +540,8 @@ async function updateSelectedCarHandler(event){
                 return result;
             }
 
-            putDataToDB(urlPutGarage, bodyStr);
-            if(isCurrentCarInWinnersTable(currentCarId)) putDataToDB(urlPutTable, bodyStr);
+            await putDataToDB(urlPutGarage, bodyStr);
+            if(isCurrentCarInWinnersTable(currentCarId)) await putDataToDB(urlPutTable, bodyStr);
 
             renderCarsInGarage();
             renderWinnersInTable();
@@ -598,7 +593,7 @@ function getWinnersPageInfoFragment(){
 
     let divPageWinners = document.createElement("div");
     divPageWinners.className ='page-winners';
-    divPageWinners.innerHTML ='Page #<span class="page-number">1</span>';
+    divPageWinners.innerHTML ='Page #<span class="page-number"></span>';
     fragmentWinnersPageInfo.append(divPageWinners);
 
     return fragmentWinnersPageInfo;
@@ -690,15 +685,15 @@ let paginationNavigationWinners = getPaginationNavigationWinners();
 document.getElementsByClassName('winners-content')[0].append(paginationNavigationWinners);
 
             /*WINNNERS VIEW - RENDERING */
-/*Rendering amount of winners in the WINNERS view*/
-async function renderWinnersAmount(){
-    let url = 'http://127.0.0.1:3000/winners';
-    let winnersArr = await getDataFromDB(url);
-    let winnersAmount = winnersArr.length;
-    document.getElementsByClassName('winners-amount')[0].innerHTML = winnersAmount;
-}
-renderWinnersAmount();
-/*//Rendering amount of winners in the WINNERS view*/
+// /*Rendering amount of winners in the WINNERS view*/
+// async function renderWinnersAmount(){
+//     let url = 'http://127.0.0.1:3000/winners';
+//     let winnersArr = await getDataFromDB(url);
+//     let winnersAmount = winnersArr.length;
+//     document.getElementsByClassName('winners-amount')[0].innerHTML = winnersAmount;
+// }
+// renderWinnersAmount();
+// /*//Rendering amount of winners in the WINNERS view*/
 
 /*Car rendering in Winners view from DB*/
 async function renderWinnersInTable(){
@@ -711,7 +706,7 @@ async function renderWinnersInTable(){
     let carsInGarageArr = await getDataFromDB(url);
     // console.log(carsInGarageArr);
 
-    let fragmentCarRowInTable = document.createDocumentFragment();
+    let fragmentCarRowsInTable = document.createDocumentFragment();
     let tbody = document.getElementsByClassName('tbody')[0];
 
     carsInGarageArr.forEach((elem,index) => {
@@ -734,7 +729,7 @@ async function renderWinnersInTable(){
 
         let tr = document.createElement('tr');
         tr.className = 'tr-row';
-        fragmentCarRowInTable.append(tr);
+        fragmentCarRowsInTable.append(tr);
 
         let thNumber = document.createElement('td');
         thNumber.className = 'th-number';
@@ -761,7 +756,7 @@ async function renderWinnersInTable(){
         thBestTime.innerHTML = `${elem.time}`;
         tr.append(thBestTime);
     })
-    tbody.append(fragmentCarRowInTable);
+    tbody.append(fragmentCarRowsInTable);
 }
 
 renderWinnersInTable();
