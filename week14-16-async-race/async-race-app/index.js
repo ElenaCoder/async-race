@@ -538,9 +538,16 @@ async function updateSelectedCarHandler(event){
             let urlPutTable = `http://127.0.0.1:3000/winners/${currentCarId}`;
             let bodyStr = JSON.stringify({name: `${currentCarName}`, color: `${currentCarColor}`});
 
-            let updatedCarGarage = await putDataToDB(urlPutGarage, bodyStr);
-            let updatedCarWinnersTable = await putDataToDB(urlPutTable, bodyStr);
-            // console.log('UpdatedCar', updatedCarGarage);
+            function isCurrentCarInWinnersTable(carId){
+                let result = false;
+                let winnerRowArr = Array.from(document.getElementsByClassName('th-number'));
+                winnerRowArr.forEach(elem => elem.innerHTML === carId ? result=true : result=false);
+                return result;
+            }
+
+            putDataToDB(urlPutGarage, bodyStr);
+            if(isCurrentCarInWinnersTable(currentCarId)) putDataToDB(urlPutTable, bodyStr);
+
             renderCarsInGarage();
             renderWinnersInTable();
 
