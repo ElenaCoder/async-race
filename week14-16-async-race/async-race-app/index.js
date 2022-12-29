@@ -439,7 +439,7 @@ function selectBtnClickHandling(event){
 }
 /*//selectBtnClickHandling callback*/
 
-/*selectBtnClickHandling callback*/
+/*removetBtnClickHandling callback*/
 function removetBtnClickHandling(event){
     let removeBtn = event.currentTarget;
     let carBlockElem = removeBtn.parentNode.parentNode;
@@ -470,7 +470,7 @@ function removetBtnClickHandling(event){
     renderCarAmountInWinnersTable();
     renderWinnersInTable();
 }
-/*//selectBtnClickHandling callback*/
+/*//removetBtnClickHandling callback*/
 
 /*Car creating by clicking button CREATE in Garage view*/
 let createBtn = document.getElementsByClassName('create')[0];
@@ -538,12 +538,15 @@ async function updateSelectedCarHandler(event){
             let currentCarColor = currentInputUpdateColorElem.value;
             let currentCarId = document.getElementsByClassName('selected')[0].getAttribute('id');
 
-            let urlPut = `http://127.0.0.1:3000/garage/${currentCarId}`;
+            let urlPutGarage = `http://127.0.0.1:3000/garage/${currentCarId}`;
+            let urlPutTable = `http://127.0.0.1:3000/winners/${currentCarId}`;
             let bodyStr = JSON.stringify({name: `${currentCarName}`, color: `${currentCarColor}`});
 
-            let updatedCar = await putDataToDB(urlPut, bodyStr);
-            console.log('UpdatedCar', updatedCar);
-            await renderCarsInGarage();
+            let updatedCarGarage = await putDataToDB(urlPutGarage, bodyStr);
+            let updatedCarWinnersTable = await putDataToDB(urlPutTable, bodyStr);
+            // console.log('UpdatedCar', updatedCarGarage);
+            renderCarsInGarage();
+            renderWinnersInTable();
 
         } else{
             alert('Please select the car you want to update.');
