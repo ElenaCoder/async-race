@@ -1,13 +1,6 @@
+import {ServerRequest} from './serverRequest.js';
 
 
-async function getDataFromDB(url){
-    let response = await fetch(url);
-    if(response.ok){
-        return  response.json(); // if the HTTP status code is 200-299
-    } else {
-        error => console.log('Error')
-    }
-}
 
 async function postDataToDB(url, bodyStr){
     let response = await fetch(url, {
@@ -224,7 +217,7 @@ function getGaragePageInfoFragment(){
 
     let divGarage = document.createElement("div");
     divGarage.className ='garage';
-    divGarage.innerHTML ='Garage (<span class="cars-in-garage"></span>)';
+    divGarage.innerHTML ='Garage (<span class="cars-in-garage">0</span>)';
     // let divCarsAmount = document.createElement("span");
     // divCarsAmount.className ='cars-in-garage';
     // divCarsAmount.innerHTML = 0;
@@ -280,8 +273,7 @@ document.getElementsByClassName('garage-content')[0].append(paginationNavigation
 /*Car rendering in Garage view from DB*/
 async function renderCarsInGarage(){
 
-    let url = 'http://127.0.0.1:3000/garage';
-    let carsInGarageArr = await getDataFromDB(url);
+    let carsInGarageArr = await ServerRequest.getCars();
 
     let trackBlockList = document.getElementsByClassName('track-block');
     while(trackBlockList.length > 0){
@@ -555,8 +547,7 @@ async function updateSelectedCarHandler(event){
 
 /*Rendering amount of cars in the GARAGE in Garage view*/
 async function renderCarAmountInGarage(){
-    let url = 'http://127.0.0.1:3000/garage';
-    let carsInGarageArr = await getDataFromDB(url);
+    let carsInGarageArr = await ServerRequest.getCars();
     let carsAmount = carsInGarageArr.length;
     document.getElementsByClassName('cars-in-garage')[0].innerHTML = carsAmount;
 }
@@ -687,8 +678,7 @@ document.getElementsByClassName('winners-content')[0].append(paginationNavigatio
             /*WINNNERS VIEW - RENDERING */
 // /*Rendering amount of winners in the WINNERS view*/
 // async function renderWinnersAmount(){
-//     let url = 'http://127.0.0.1:3000/winners';
-//     let winnersArr = await getDataFromDB(url);
+//     let winnersArr = await ServerRequest.getWinners();
 //     let winnersAmount = winnersArr.length;
 //     document.getElementsByClassName('winners-amount')[0].innerHTML = winnersAmount;
 // }
@@ -702,8 +692,7 @@ async function renderWinnersInTable(){
         winnersRows[0].parentNode.removeChild(winnersRows[0]);
     }
 
-    let url = 'http://127.0.0.1:3000/winners';
-    let carsInGarageArr = await getDataFromDB(url);
+    let carsInGarageArr = await ServerRequest.getWinners();
     // console.log(carsInGarageArr);
 
     let fragmentCarRowsInTable = document.createDocumentFragment();
@@ -765,8 +754,7 @@ renderWinnersInTable();
 
 /*Rendering amount of cars in the table of the WINNERS view*/
 async function renderCarAmountInWinnersTable(){
-    let url = 'http://127.0.0.1:3000/winners';
-    let winnersInTableArr = await getDataFromDB(url);
+    let winnersInTableArr = await ServerRequest.getWinners();
     let winnersAmount = winnersInTableArr.length;
     document.getElementsByClassName('winners-amount')[0].innerHTML = winnersAmount;
 }
