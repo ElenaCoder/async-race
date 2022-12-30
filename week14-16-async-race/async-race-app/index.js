@@ -1,22 +1,5 @@
 import {ServerRequest} from './serverRequest.js';
 
-
-
-async function postDataToDB(url, bodyStr){
-    let response = await fetch(url, {
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: bodyStr
-    });
-    if(response.ok){
-        return  response.json(); // if the HTTP status code is 200-299
-    } else {
-        error => console.log('Error')
-    }
-}
-
 async function putDataToDB(url, bodyStr){
     let response = await fetch(url, {
         method: 'PUT',
@@ -31,22 +14,6 @@ async function putDataToDB(url, bodyStr){
         error => console.log('Error')
     }
 }
-
-async function deleteDataFromDB(url, bodyStr){
-    let response = await fetch(url, {
-        method: 'DELETE',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: bodyStr
-    });
-    if(response.ok){
-        return  response.json(); // if the HTTP status code is 200-299
-    } else {
-        error => console.log('Error')
-    }
-}
-
 
 
 
@@ -428,27 +395,10 @@ async function removetBtnClickHandling(event){
     let removeBtn = event.currentTarget;
     let carBlockElem = removeBtn.parentNode.parentNode;
     let currentCarId = carBlockElem.getAttribute('id')
-    let currentCarName = carBlockElem.getElementsByClassName('car-name')[0].innerHTML;
-    let currentCarColor = carBlockElem.getElementsByTagName('path')[0].getAttribute('fill');
 
-    let urlDeleteFromGarage = `http://127.0.0.1:3000/garage/${currentCarId}`;
-    let urlDeleteFromTableWinners = `http://127.0.0.1:3000/winners/${currentCarId}`;
-    let bodyStr = JSON.stringify({name: `${currentCarName}`, color: `${currentCarColor}`});
+    await ServerRequest.deleteCar(currentCarId);
+    if((await ServerRequest.getWinner(currentCarId))) await ServerRequest.deleteWinner(currentCarId);
 
-
-
-    function isCurrentCarInWinnersTable(carId){
-        let result = false;
-        let winnerRowArr = Array.from(document.getElementsByClassName('th-number'));
-        winnerRowArr.forEach(elem => elem.innerHTML === carId ? result=true : result=false);
-        return result;
-    }
-
-    if(isCurrentCarInWinnersTable(currentCarId)) await deleteDataFromDB(urlDeleteFromTableWinners, bodyStr);
-
-
-    deleteDataFromDB(urlDeleteFromGarage, bodyStr);
-    // deleteDataFromDB(urlDeleteFromTableWinners, bodyStr);
     renderCarAmountInGarage();
     renderCarsInGarage();
     renderCarAmountInWinnersTable();
