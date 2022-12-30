@@ -465,11 +465,9 @@ async function createNewCarHandler(event){
     let newCarName = formCreate.getElementsByClassName('input-text')[0].value;
     let newCarColor = formCreate.getElementsByClassName('input-color')[0].value;
 
-    if(newCarName){
-        let urlPOST = `http://127.0.0.1:3000/garage`;
-        let bodyStr = JSON.stringify({name: `${newCarName}`, color: `${newCarColor}`});
 
-        let newCar = await postDataToDB(urlPOST, bodyStr);
+    if(newCarName){
+        await ServerRequest.createCar(newCarName, newCarColor)
         renderUpdatedCarInGarage();
     }
     renderCarAmountInGarage();
