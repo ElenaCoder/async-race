@@ -15,7 +15,7 @@ async function sendRequest(urlStr, methodStr, bodyStr = '') {
     let response = await fetch(urlStr, param)
         .then(async (response) => {
             if (response.ok) {
-                return response.json(); // if the HTTP status code is 200-299
+                return response; // if the HTTP status code is 200-299
             } else {
                 const error = (data && data.message) || response.status;
                 return Promise.reject(error);
@@ -23,7 +23,7 @@ async function sendRequest(urlStr, methodStr, bodyStr = '') {
         })
         .catch((error) => {
             console.log(`Error(${error}): ${urlStr}, ${methodStr}, ${bodyStr}`);
-            return false;
+            return null;
         });
     return response;
 }
@@ -39,26 +39,37 @@ class ServerRequest {
             '?' +
             new URLSearchParams({ _page: page, _limit: limit });
         let response = await sendRequest(urlStr, 'GET');
-        return response;
+        let totalCount = response.headers.get('X-Total-Count');
+        return {
+            data: response.json(),
+            totalCount: totalCount,
+        };
     }
 
     static async getCar(id) {
         let urlStr = serverURL + `garage/${id}`;
         let response = await sendRequest(urlStr, 'GET');
-        return response;
+        return response.json();
     }
 
     static async createCar(name, color) {
         let urlStr = serverURL + 'garage';
         let bodyStr = JSON.stringify({ name: `${name}`, color: `${color}` });
         let response = await sendRequest(urlStr, 'POST', bodyStr);
-        return response;
+        return response.json();
     }
 
     static async deleteCar(id) {
         let urlStr = serverURL + `garage/${id}`;
         let response = await sendRequest(urlStr, 'DELETE');
-        return response;
+        return response.json();
+    }
+
+    static async updateCar(id, name, color) {
+        let urlStr = serverURL + `garage/${id}`;
+        let bodyStr = JSON.stringify({ name: `${name}`, color: `${color}` });
+        let response = await sendRequest(urlStr, 'PUT', bodyStr);
+        return response.json();
     }
 
     /*WINNERS */
@@ -75,13 +86,17 @@ class ServerRequest {
                 _order: order,
             });
         let response = await sendRequest(urlStr, 'GET');
-        return response;
+        let totalCount = response.headers.get('X-Total-Count');
+        return {
+            data: response.json(),
+            totalCount: totalCount,
+        };
     }
 
     static async getWinner(id) {
         let urlStr = serverURL + `winners/${id}`;
         let response = await sendRequest(urlStr, 'GET');
-        return response;
+        return response.json();
     }
 
     static async createWinner(id, wins, time) {
@@ -92,13 +107,20 @@ class ServerRequest {
             time: `${time}`,
         });
         let response = await sendRequest(urlStr, 'POST', bodyStr);
-        return response;
+        return response.json();
     }
 
     static async deleteWinner(id) {
         let urlStr = serverURL + `winners/${id}`;
         let response = await sendRequest(urlStr, 'DELETE');
-        return response;
+        return response.json();
+    }
+
+    static async updateWinner(id, wins, time) {
+        let urlStr = serverURL + `winners/${id}`;
+        let bodyStr = JSON.stringify({ wins: `${wins}`, time: `${time}` });
+        let response = await sendRequest(urlStr, 'PUT', bodyStr);
+        return response.json();
     }
 }
 

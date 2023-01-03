@@ -1,34 +1,18 @@
 import {ServerRequest} from './serverRequest.js';
 
-async function putDataToDB(url, bodyStr){
-    let response = await fetch(url, {
-        method: 'PUT',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: bodyStr
-    });
-    if(response.ok){
-        return  response.json(); // if the HTTP status code is 200-299
-    } else {
-        error => console.log('Error')
-    }
-}
 
-
-
-function getNavigationMenu(){
+function getNavigationMenu() {
     const fragmentNavigationMenu = document.createDocumentFragment();
 
     let h1Logo = document.createElement('h1');
     h1Logo.className = 'logo';
-    h1Logo.innerHTML = '<span>a</span><span>s</span><span>y</span><span>n</span><span>c</span><span>&nbsp;</span><span>r</span><span>a</span><span>c</span><span>e</span>';
+    h1Logo.innerHTML =
+        '<span>a</span><span>s</span><span>y</span><span>n</span><span>c</span><span>&nbsp;</span><span>r</span><span>a</span><span>c</span><span>e</span>';
     fragmentNavigationMenu.append(h1Logo);
 
     let divNav = document.createElement('div');
     divNav.className = 'nav';
     h1Logo.after(divNav);
-
 
     let btnToGarage = document.createElement('div');
     btnToGarage.className = 'to-garage button';
@@ -54,14 +38,13 @@ function getNavigationMenu(){
 let navigationMenu = getNavigationMenu();
 document.body.append(navigationMenu);
 
-
 /*------------------GARAGE view------------------------*/
-function getGarageViewContent(){
+function getGarageViewContent() {
     const fragmentGarageViewContent = document.createDocumentFragment();
 
     let divGarageViewContent = document.createElement('div');
     divGarageViewContent.className = 'garage-content';
-    fragmentGarageViewContent.prepend(divGarageViewContent)
+    fragmentGarageViewContent.prepend(divGarageViewContent);
 
     return fragmentGarageViewContent;
 }
@@ -69,21 +52,21 @@ function getGarageViewContent(){
 let garageViewContent = getGarageViewContent();
 document.body.append(garageViewContent);
 
-function getFormCreateFragment(){
+function getFormCreateFragment() {
     const fragmentFormCreate = document.createDocumentFragment();
 
-    let formCreate = document.createElement("form");
-    formCreate.className ='form-create';
+    let formCreate = document.createElement('form');
+    formCreate.className = 'form-create';
     fragmentFormCreate.append(formCreate);
 
-    let inputTextFormCreate = document.createElement("input");
+    let inputTextFormCreate = document.createElement('input');
     inputTextFormCreate.setAttribute('type', 'text');
     inputTextFormCreate.setAttribute('value', '');
     // inputTextFormCreate.setAttribute('required', '');
     inputTextFormCreate.classList = 'input-text';
     formCreate.append(inputTextFormCreate);
 
-    let inputColorFormCreate = document.createElement("input");
+    let inputColorFormCreate = document.createElement('input');
     inputColorFormCreate.setAttribute('type', 'color');
     inputColorFormCreate.setAttribute('value', '#bbbbbb');
     inputColorFormCreate.classList = 'input-color';
@@ -104,20 +87,20 @@ function getFormCreateFragment(){
 let formCreateFragment = getFormCreateFragment();
 document.getElementsByClassName('garage-content')[0].append(formCreateFragment);
 
-function getFormUpdateFragment(){
+function getFormUpdateFragment() {
     const fragmentFormUpdate = document.createDocumentFragment();
 
-    let formUpdate = document.createElement("form");
-    formUpdate.className ='form-update';
+    let formUpdate = document.createElement('form');
+    formUpdate.className = 'form-update';
     fragmentFormUpdate.append(formUpdate);
 
-    let inputTextFormUpdate = document.createElement("input");
+    let inputTextFormUpdate = document.createElement('input');
     inputTextFormUpdate.setAttribute('type', 'text');
     inputTextFormUpdate.setAttribute('value', '');
     inputTextFormUpdate.classList = 'input-text';
     formUpdate.append(inputTextFormUpdate);
 
-    let inputColorFormUpdate = document.createElement("input");
+    let inputColorFormUpdate = document.createElement('input');
     inputColorFormUpdate.setAttribute('type', 'color');
     inputColorFormUpdate.setAttribute('value', '#bbbbbb');
     inputColorFormUpdate.classList = 'input-color';
@@ -138,11 +121,11 @@ function getFormUpdateFragment(){
 let formUpdateFragment = getFormUpdateFragment();
 document.getElementsByClassName('garage-content')[0].append(formUpdateFragment);
 
-function getTaskbarFragment(){
+function getTaskbarFragment() {
     const fragmentTaskbar = document.createDocumentFragment();
 
-    let divTaskbar = document.createElement("div");
-    divTaskbar.className ='taskbar';
+    let divTaskbar = document.createElement('div');
+    divTaskbar.className = 'taskbar';
     fragmentTaskbar.append(divTaskbar);
 
     let btnRace = document.createElement('div');
@@ -178,32 +161,30 @@ function getTaskbarFragment(){
 let taskbarFragment = getTaskbarFragment();
 document.getElementsByClassName('garage-content')[0].append(taskbarFragment);
 
-
-function getGaragePageInfoFragment(){
+function getGaragePageInfoFragment() {
     const fragmentGaragePageInfo = document.createDocumentFragment();
 
-    let divGarage = document.createElement("div");
-    divGarage.className ='garage';
-    divGarage.innerHTML ='Garage (<span class="cars-in-garage">0</span>)';
-    // let divCarsAmount = document.createElement("span");
-    // divCarsAmount.className ='cars-in-garage';
-    // divCarsAmount.innerHTML = 0;
-    // divGarage.append(divCarsAmount);
+    let divGarage = document.createElement('div');
+    divGarage.className = 'garage';
+    divGarage.innerHTML = 'Garage (<span class="cars-in-garage">0</span>)';
     fragmentGaragePageInfo.append(divGarage);
 
-    let divPage = document.createElement("div");
-    divPage.className ='page-garage';
-    divPage.innerHTML ='Page #<span class="page-number"></span>';
+    let divPage = document.createElement('div');
+    divPage.className = 'page-garage';
+    divPage.innerHTML = 'Page #<span class="page-number"></span>';
     fragmentGaragePageInfo.append(divPage);
 
     return fragmentGaragePageInfo;
 }
 
 let pageGarageInfoFragment = getGaragePageInfoFragment();
-document.getElementsByClassName('garage-content')[0].append(pageGarageInfoFragment);
+document
+    .getElementsByClassName('garage-content')[0]
+    .append(pageGarageInfoFragment);
 
-function getPaginationNavigationGarage(){
-    const fragmentPaginationNavigationGarage = document.createDocumentFragment();
+function getPaginationNavigationGarage() {
+    const fragmentPaginationNavigationGarage =
+        document.createDocumentFragment();
 
     let divPaginationNavigationGarage = document.createElement('div');
     divPaginationNavigationGarage.className = 'pagination-navigation';
@@ -218,7 +199,6 @@ function getPaginationNavigationGarage(){
     btnToPrev.prepend(linkToPrev);
     divPaginationNavigationGarage.append(btnToPrev);
 
-
     let btnToNext = document.createElement('div');
     btnToNext.className = 'to-next button gray';
     let linkToNext = document.createElement('a');
@@ -232,31 +212,34 @@ function getPaginationNavigationGarage(){
 }
 
 let paginationNavigationGarage = getPaginationNavigationGarage();
-document.getElementsByClassName('garage-content')[0].append(paginationNavigationGarage);
+document
+    .getElementsByClassName('garage-content')[0]
+    .append(paginationNavigationGarage);
 
-
-
-            /*GARAGE VIEW - RENDERING */
+/*GARAGE VIEW - RENDERING */
 /*Car rendering in Garage view from DB*/
-async function renderCarsInGarage(){
+async function renderCarsInGarage() {
+    let carsInGarageResponse = await ServerRequest.getCars();
+    let carsInGarageArr = await carsInGarageResponse.data;
 
-    let carsInGarageArr = await ServerRequest.getCars();
+    // Rendering amount of cars in the Garage
+    document.getElementsByClassName('cars-in-garage')[0].innerHTML =
+        carsInGarageResponse.totalCount;
 
     let trackBlockList = document.getElementsByClassName('track-block');
-    while(trackBlockList.length > 0){
+    while (trackBlockList.length > 0) {
         trackBlockList[0].parentNode.removeChild(trackBlockList[0]);
     }
 
     let fragmentCarsBlock = document.createDocumentFragment();
 
-    carsInGarageArr.reverse().forEach(elem =>{
+    carsInGarageArr.forEach((elem) => {
         let divCarBlock = document.createElement('div');
         divCarBlock.className = 'track-block';
         divCarBlock.id = `${elem.id}`;
         fragmentCarsBlock.append(divCarBlock);
 
-        function createNavigationInCarBlockFragment(elem,node){
-
+        function createNavigationInCarBlockFragment(elem, node) {
             let divBlockNavigation = document.createElement('div');
             divBlockNavigation.className = 'block-nav';
             node.append(divBlockNavigation);
@@ -284,7 +267,6 @@ async function renderCarsInGarage(){
             carName.innerHTML = `${elem.name}`;
             divBlockNavigation.append(carName);
 
-
             let divBlockControlPanel = document.createElement('div');
             divBlockControlPanel.className = 'control-panel';
             node.append(divBlockControlPanel);
@@ -310,13 +292,15 @@ async function renderCarsInGarage(){
         createNavigationInCarBlockFragment(elem, divCarBlock);
 
         function createCarTrack(elem, node) {
-
             let divBlockCarTrack = document.createElement('div');
             divBlockCarTrack.className = 'car-track';
             node.append(divBlockCarTrack);
 
             // Create an element within the svg - namespace (NS)
-            let carIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            let carIcon = document.createElementNS(
+                'http://www.w3.org/2000/svg',
+                'svg',
+            );
             carIcon.classList.add('car-image');
             carIcon.setAttribute('width', '100');
             carIcon.setAttribute('height', '40');
@@ -324,28 +308,58 @@ async function renderCarsInGarage(){
             carIcon.setAttribute('fill', 'none');
             divBlockCarTrack.append(carIcon);
 
-            let iconpPath1 = document.createElementNS('http://www.w3.org/2000/svg','path');
-            iconpPath1.setAttribute('d', 'M178.519 24.5458C176.214 24.392 174.224 24.2604 173.234 23.9918C166.285 22.1029 141.535 20.9744 138.887 20.8558C134.632 19.7123 130.918 17.1829 126.63 14.2671C117.973 8.37356 107.195 1.03531 85.5599 0.6033L84.0597 0.589931C73.5976 0.589931 61.9337 2.68938 50.8964 5.53586C46.0253 3.75185 38.0016 1.01609 33.5145 0.599959C31.2507 0.393148 30.0921 1.45144 29.6143 2.10529C27.9601 4.37479 29.1204 8.63511 30.3566 11.7845C17.2457 16.3335 7.74705 20.6268 6.91273 21.0083L6.41616 21.3488C4.02404 23.7165 5.06955 27.1078 5.91609 29.8335C6.17136 30.6766 6.43274 31.5059 6.58677 32.2906C6.89484 33.8745 3.29488 34.888 3.25648 34.8947L0.800649 35.5143L4.06986 39.7153L1.3461 43.3736L4.35654 47.0857C2.45227 47.4304 0.615197 48.2025 0.126475 49.8566C-0.542464 52.1056 1.43425 54.4106 6.74343 57.5654C9.38471 59.1359 12.1765 60.0802 15.2908 60.5218C15.1734 59.9741 15.0949 59.4138 15.0233 58.8493C14.9513 58.2803 14.9147 57.7008 14.8859 57.1196C14.8728 56.8163 14.8396 56.5151 14.8396 56.2067C14.8396 44.1386 25.0941 34.3194 37.6974 34.3194C50.3008 34.3194 60.5561 44.1419 60.5561 56.2067C60.5561 57.9949 60.3069 59.7246 59.8819 61.387C59.7414 61.9314 59.5944 62.4721 59.415 63.001C59.2409 63.5137 59.0489 64.0121 58.836 64.5093C69.6882 67.3023 82.7886 68 92.7742 68C99.8031 68 104.594 67.6704 104.675 67.6603H163.163C162.782 67.1331 162.427 66.5824 162.097 66.0213C161.782 65.489 161.499 64.9413 161.232 64.3839C159.943 61.6862 159.206 58.6998 159.206 55.5433C159.206 43.7696 169.213 34.1878 181.509 34.1878C193.808 34.1878 203.813 43.7701 203.813 55.5433C203.813 58.2444 203.264 60.8193 202.307 63.1982C202.026 63.893 201.708 64.5728 201.36 65.2325C200.993 65.9202 200.594 66.5903 200.153 67.2317C208.141 65.7297 210.479 60.6551 210.666 60.1725C213.183 49.4521 212.135 41.0234 207.55 35.1291C200.437 25.9968 186.715 25.0868 178.519 24.5458Z');
+            let iconpPath1 = document.createElementNS(
+                'http://www.w3.org/2000/svg',
+                'path',
+            );
+            iconpPath1.setAttribute(
+                'd',
+                'M178.519 24.5458C176.214 24.392 174.224 24.2604 173.234 23.9918C166.285 22.1029 141.535 20.9744 138.887 20.8558C134.632 19.7123 130.918 17.1829 126.63 14.2671C117.973 8.37356 107.195 1.03531 85.5599 0.6033L84.0597 0.589931C73.5976 0.589931 61.9337 2.68938 50.8964 5.53586C46.0253 3.75185 38.0016 1.01609 33.5145 0.599959C31.2507 0.393148 30.0921 1.45144 29.6143 2.10529C27.9601 4.37479 29.1204 8.63511 30.3566 11.7845C17.2457 16.3335 7.74705 20.6268 6.91273 21.0083L6.41616 21.3488C4.02404 23.7165 5.06955 27.1078 5.91609 29.8335C6.17136 30.6766 6.43274 31.5059 6.58677 32.2906C6.89484 33.8745 3.29488 34.888 3.25648 34.8947L0.800649 35.5143L4.06986 39.7153L1.3461 43.3736L4.35654 47.0857C2.45227 47.4304 0.615197 48.2025 0.126475 49.8566C-0.542464 52.1056 1.43425 54.4106 6.74343 57.5654C9.38471 59.1359 12.1765 60.0802 15.2908 60.5218C15.1734 59.9741 15.0949 59.4138 15.0233 58.8493C14.9513 58.2803 14.9147 57.7008 14.8859 57.1196C14.8728 56.8163 14.8396 56.5151 14.8396 56.2067C14.8396 44.1386 25.0941 34.3194 37.6974 34.3194C50.3008 34.3194 60.5561 44.1419 60.5561 56.2067C60.5561 57.9949 60.3069 59.7246 59.8819 61.387C59.7414 61.9314 59.5944 62.4721 59.415 63.001C59.2409 63.5137 59.0489 64.0121 58.836 64.5093C69.6882 67.3023 82.7886 68 92.7742 68C99.8031 68 104.594 67.6704 104.675 67.6603H163.163C162.782 67.1331 162.427 66.5824 162.097 66.0213C161.782 65.489 161.499 64.9413 161.232 64.3839C159.943 61.6862 159.206 58.6998 159.206 55.5433C159.206 43.7696 169.213 34.1878 181.509 34.1878C193.808 34.1878 203.813 43.7701 203.813 55.5433C203.813 58.2444 203.264 60.8193 202.307 63.1982C202.026 63.893 201.708 64.5728 201.36 65.2325C200.993 65.9202 200.594 66.5903 200.153 67.2317C208.141 65.7297 210.479 60.6551 210.666 60.1725C213.183 49.4521 212.135 41.0234 207.55 35.1291C200.437 25.9968 186.715 25.0868 178.519 24.5458Z',
+            );
             iconpPath1.setAttribute('fill', `${elem.color}`);
             carIcon.append(iconpPath1);
 
-            let iconpPath2 = document.createElementNS('http://www.w3.org/2000/svg','path');
-            iconpPath2.setAttribute('d', 'M182 37C171.523 37 163 45.0747 163 55C163 64.9253 171.523 73 182 73C192.477 73 201 64.9253 201 55C201 45.0747 192.477 37 182 37ZM182 67.7844C174.547 67.7844 168.505 62.0608 168.505 55C168.505 47.9392 174.547 42.2156 182 42.2156C189.453 42.2156 195.495 47.9392 195.495 55C195.495 62.0608 189.453 67.7844 182 67.7844Z');
+            let iconpPath2 = document.createElementNS(
+                'http://www.w3.org/2000/svg',
+                'path',
+            );
+            iconpPath2.setAttribute(
+                'd',
+                'M182 37C171.523 37 163 45.0747 163 55C163 64.9253 171.523 73 182 73C192.477 73 201 64.9253 201 55C201 45.0747 192.477 37 182 37ZM182 67.7844C174.547 67.7844 168.505 62.0608 168.505 55C168.505 47.9392 174.547 42.2156 182 42.2156C189.453 42.2156 195.495 47.9392 195.495 55C195.495 62.0608 189.453 67.7844 182 67.7844Z',
+            );
             iconpPath2.setAttribute('fill', `var(--dark-gray)`);
             carIcon.append(iconpPath2);
 
-            let iconpPath3 = document.createElementNS('http://www.w3.org/2000/svg','path');
-            iconpPath3.setAttribute('d', 'M182 43.8707C175.522 43.8707 170.252 48.8633 170.252 55C170.252 61.1368 175.522 66.1294 182 66.1294C188.478 66.1294 193.748 61.1368 193.748 55C193.748 48.8633 188.478 43.8707 182 43.8707ZM192.243 54.2905H186.543C186.427 53.608 186.142 52.9786 185.732 52.4406L189.756 48.6284C191.169 50.1694 192.078 52.1331 192.243 54.2905ZM182.737 45.295C185.013 45.4487 187.085 46.3071 188.713 47.6416L184.69 51.4531C184.122 51.0644 183.457 50.795 182.737 50.6847V45.295ZM181.263 45.295V50.6846C180.543 50.7949 179.878 51.0643 179.31 51.4531L175.287 47.6417C176.915 46.3072 178.987 45.4487 181.263 45.295ZM174.244 48.6285L178.268 52.4408C177.857 52.9786 177.573 53.608 177.457 54.2903H171.757C171.922 52.1331 172.831 50.1696 174.244 48.6285ZM171.755 55.687H177.457C177.573 56.3693 177.858 56.9987 178.268 57.5367L174.233 61.3596C172.822 59.8148 171.915 57.8474 171.755 55.687ZM181.263 64.7051C178.981 64.5509 176.904 63.6885 175.274 62.3479L179.31 58.5242C179.878 58.913 180.543 59.1825 181.263 59.2928V64.7051ZM181.263 57.8561V57.8662C180.945 57.793 180.646 57.6739 180.374 57.5163L180.381 57.5097C179.956 57.2639 179.598 56.9253 179.339 56.522L179.332 56.5285C179.166 56.2709 179.04 55.9881 178.963 55.6867H178.973C178.916 55.4625 178.882 55.2295 178.882 54.9885C178.882 54.7474 178.916 54.5144 178.973 54.2902H178.963C179.04 53.9889 179.166 53.7062 179.332 53.4485L179.339 53.455C179.598 53.0519 179.956 52.7132 180.381 52.4675L180.374 52.4608C180.646 52.3033 180.945 52.1841 181.263 52.1109V52.1211C181.5 52.0667 181.746 52.0346 182 52.0346C182.255 52.0346 182.501 52.0667 182.737 52.1211V52.1109C183.056 52.1842 183.354 52.3031 183.626 52.4607L183.619 52.4674C184.044 52.713 184.402 53.0518 184.661 53.4549L184.668 53.4484C184.835 53.706 184.96 53.9889 185.038 54.2903H185.027C185.084 54.5145 185.118 54.7476 185.118 54.9886C185.118 55.2296 185.084 55.4627 185.027 55.6869H185.038C184.96 55.9883 184.835 56.2711 184.668 56.5288L184.661 56.5223C184.402 56.9254 184.044 57.264 183.619 57.5098L183.626 57.5163C183.354 57.6739 183.056 57.793 182.737 57.8662V57.8561C182.501 57.9105 182.255 57.9426 182 57.9426C181.746 57.9426 181.5 57.9107 181.263 57.8561ZM182.737 64.7051V59.2928C183.457 59.1825 184.122 58.913 184.69 58.5244L188.726 62.3479C187.096 63.6885 185.019 64.5509 182.737 64.7051ZM189.767 61.3596L185.732 57.5368C186.142 56.9988 186.427 56.3694 186.543 55.687H192.245C192.085 57.8474 191.178 59.8148 189.767 61.3596Z');
+            let iconpPath3 = document.createElementNS(
+                'http://www.w3.org/2000/svg',
+                'path',
+            );
+            iconpPath3.setAttribute(
+                'd',
+                'M182 43.8707C175.522 43.8707 170.252 48.8633 170.252 55C170.252 61.1368 175.522 66.1294 182 66.1294C188.478 66.1294 193.748 61.1368 193.748 55C193.748 48.8633 188.478 43.8707 182 43.8707ZM192.243 54.2905H186.543C186.427 53.608 186.142 52.9786 185.732 52.4406L189.756 48.6284C191.169 50.1694 192.078 52.1331 192.243 54.2905ZM182.737 45.295C185.013 45.4487 187.085 46.3071 188.713 47.6416L184.69 51.4531C184.122 51.0644 183.457 50.795 182.737 50.6847V45.295ZM181.263 45.295V50.6846C180.543 50.7949 179.878 51.0643 179.31 51.4531L175.287 47.6417C176.915 46.3072 178.987 45.4487 181.263 45.295ZM174.244 48.6285L178.268 52.4408C177.857 52.9786 177.573 53.608 177.457 54.2903H171.757C171.922 52.1331 172.831 50.1696 174.244 48.6285ZM171.755 55.687H177.457C177.573 56.3693 177.858 56.9987 178.268 57.5367L174.233 61.3596C172.822 59.8148 171.915 57.8474 171.755 55.687ZM181.263 64.7051C178.981 64.5509 176.904 63.6885 175.274 62.3479L179.31 58.5242C179.878 58.913 180.543 59.1825 181.263 59.2928V64.7051ZM181.263 57.8561V57.8662C180.945 57.793 180.646 57.6739 180.374 57.5163L180.381 57.5097C179.956 57.2639 179.598 56.9253 179.339 56.522L179.332 56.5285C179.166 56.2709 179.04 55.9881 178.963 55.6867H178.973C178.916 55.4625 178.882 55.2295 178.882 54.9885C178.882 54.7474 178.916 54.5144 178.973 54.2902H178.963C179.04 53.9889 179.166 53.7062 179.332 53.4485L179.339 53.455C179.598 53.0519 179.956 52.7132 180.381 52.4675L180.374 52.4608C180.646 52.3033 180.945 52.1841 181.263 52.1109V52.1211C181.5 52.0667 181.746 52.0346 182 52.0346C182.255 52.0346 182.501 52.0667 182.737 52.1211V52.1109C183.056 52.1842 183.354 52.3031 183.626 52.4607L183.619 52.4674C184.044 52.713 184.402 53.0518 184.661 53.4549L184.668 53.4484C184.835 53.706 184.96 53.9889 185.038 54.2903H185.027C185.084 54.5145 185.118 54.7476 185.118 54.9886C185.118 55.2296 185.084 55.4627 185.027 55.6869H185.038C184.96 55.9883 184.835 56.2711 184.668 56.5288L184.661 56.5223C184.402 56.9254 184.044 57.264 183.619 57.5098L183.626 57.5163C183.354 57.6739 183.056 57.793 182.737 57.8662V57.8561C182.501 57.9105 182.255 57.9426 182 57.9426C181.746 57.9426 181.5 57.9107 181.263 57.8561ZM182.737 64.7051V59.2928C183.457 59.1825 184.122 58.913 184.69 58.5244L188.726 62.3479C187.096 63.6885 185.019 64.5509 182.737 64.7051ZM189.767 61.3596L185.732 57.5368C186.142 56.9988 186.427 56.3694 186.543 55.687H192.245C192.085 57.8474 191.178 59.8148 189.767 61.3596Z',
+            );
             iconpPath3.setAttribute('fill', `var(--light-gray)`);
             carIcon.append(iconpPath3);
 
-            let iconpPath4 = document.createElementNS('http://www.w3.org/2000/svg','path');
-            iconpPath4.setAttribute('d', 'M38.0002 38C27.5235 38 19 46.0747 19 56C19 65.9253 27.5235 74 38.0002 74C48.4767 74 57.0002 65.9253 57.0002 56C57.0002 46.0747 48.4765 38 38.0002 38ZM38.0002 68.7844C30.5471 68.7844 24.5054 63.0608 24.5054 56C24.5054 48.9392 30.5471 43.2156 38.0002 43.2156C45.4529 43.2156 51.4948 48.9392 51.4948 56C51.4948 63.0608 45.4527 68.7844 38.0002 68.7844Z');
+            let iconpPath4 = document.createElementNS(
+                'http://www.w3.org/2000/svg',
+                'path',
+            );
+            iconpPath4.setAttribute(
+                'd',
+                'M38.0002 38C27.5235 38 19 46.0747 19 56C19 65.9253 27.5235 74 38.0002 74C48.4767 74 57.0002 65.9253 57.0002 56C57.0002 46.0747 48.4765 38 38.0002 38ZM38.0002 68.7844C30.5471 68.7844 24.5054 63.0608 24.5054 56C24.5054 48.9392 30.5471 43.2156 38.0002 43.2156C45.4529 43.2156 51.4948 48.9392 51.4948 56C51.4948 63.0608 45.4527 68.7844 38.0002 68.7844Z',
+            );
             iconpPath4.setAttribute('fill', `var(--dark-gray)`);
             carIcon.append(iconpPath4);
 
-            let iconpPath5 = document.createElementNS('http://www.w3.org/2000/svg','path');
-            iconpPath5.setAttribute('d', 'M38.0001 44.8707C31.5223 44.8707 26.2524 49.8633 26.2524 56C26.2524 62.1368 31.5224 67.1294 38.0001 67.1294C44.4778 67.1294 49.7478 62.1368 49.7478 56C49.7478 49.8633 44.4777 44.8707 38.0001 44.8707ZM48.2433 55.2905H42.5433C42.4268 54.608 42.1423 53.9786 41.7319 53.4406L45.7559 49.6284C47.1686 51.1694 48.0781 53.1331 48.2433 55.2905ZM38.7372 46.295C41.013 46.4487 43.0851 47.3071 44.7127 48.6416L40.6895 52.4531C40.1216 52.0644 39.4574 51.795 38.7372 51.6847V46.295ZM37.2629 46.295V51.6846C36.5427 51.7949 35.8784 52.0643 35.3105 52.4531L31.2872 48.6417C32.9148 47.3072 34.9871 46.4487 37.2629 46.295ZM30.2437 49.6285L34.268 53.4408C33.8575 53.9786 33.5731 54.608 33.4567 55.2903H27.7567C27.9219 53.1331 28.8314 51.1696 30.2437 49.6285ZM27.755 56.687H33.4568C33.5731 57.3693 33.8577 57.9987 34.2681 58.5367L30.2328 62.3596C28.8217 60.8148 27.9149 58.8474 27.755 56.687ZM37.2629 65.7051C34.981 65.5509 32.904 64.6885 31.2743 63.3479L35.3105 59.5242C35.8784 59.913 36.5427 60.1825 37.2629 60.2928V65.7051ZM37.2629 58.8561V58.8662C36.9448 58.793 36.6462 58.6739 36.3742 58.5163L36.3812 58.5097C35.9557 58.2639 35.5983 57.9253 35.3388 57.522L35.332 57.5285C35.1657 57.2709 35.0399 56.9881 34.9626 56.6867H34.9732C34.9157 56.4625 34.882 56.2295 34.882 55.9885C34.882 55.7474 34.9159 55.5144 34.9732 55.2902H34.9626C35.0399 54.9889 35.1655 54.7062 35.332 54.4485L35.3388 54.455C35.5983 54.0519 35.9559 53.7132 36.3812 53.4675L36.3742 53.4608C36.6462 53.3033 36.9448 53.1841 37.2629 53.1109V53.1211C37.4997 53.0667 37.7456 53.0346 38.0001 53.0346C38.2547 53.0346 38.5006 53.0667 38.7374 53.1211V53.1109C39.0555 53.1842 39.3539 53.3031 39.6258 53.4607L39.6188 53.4674C40.0444 53.713 40.4018 54.0518 40.6613 54.4549L40.6682 54.4484C40.8346 54.706 40.9603 54.9889 41.0377 55.2903H41.0271C41.0845 55.5145 41.1183 55.7476 41.1183 55.9886C41.1183 56.2296 41.0844 56.4627 41.0271 56.6869H41.0377C40.9603 56.9883 40.8348 57.2711 40.6682 57.5288L40.6613 57.5223C40.4018 57.9254 40.0443 58.264 39.6188 58.5098L39.6258 58.5163C39.3539 58.6739 39.0555 58.793 38.7374 58.8662V58.8561C38.5006 58.9105 38.2547 58.9426 38.0001 58.9426C37.7456 58.9426 37.4997 58.9107 37.2629 58.8561ZM38.7372 65.7051V60.2928C39.4574 60.1825 40.1216 59.913 40.6895 59.5244L44.7255 63.3479C43.096 64.6885 41.019 65.5509 38.7372 65.7051ZM45.7671 62.3596L41.732 58.5368C42.1424 57.9988 42.4268 57.3694 42.5434 56.687H48.2451C48.0851 58.8474 47.1784 60.8148 45.7671 62.3596Z');
+            let iconpPath5 = document.createElementNS(
+                'http://www.w3.org/2000/svg',
+                'path',
+            );
+            iconpPath5.setAttribute(
+                'd',
+                'M38.0001 44.8707C31.5223 44.8707 26.2524 49.8633 26.2524 56C26.2524 62.1368 31.5224 67.1294 38.0001 67.1294C44.4778 67.1294 49.7478 62.1368 49.7478 56C49.7478 49.8633 44.4777 44.8707 38.0001 44.8707ZM48.2433 55.2905H42.5433C42.4268 54.608 42.1423 53.9786 41.7319 53.4406L45.7559 49.6284C47.1686 51.1694 48.0781 53.1331 48.2433 55.2905ZM38.7372 46.295C41.013 46.4487 43.0851 47.3071 44.7127 48.6416L40.6895 52.4531C40.1216 52.0644 39.4574 51.795 38.7372 51.6847V46.295ZM37.2629 46.295V51.6846C36.5427 51.7949 35.8784 52.0643 35.3105 52.4531L31.2872 48.6417C32.9148 47.3072 34.9871 46.4487 37.2629 46.295ZM30.2437 49.6285L34.268 53.4408C33.8575 53.9786 33.5731 54.608 33.4567 55.2903H27.7567C27.9219 53.1331 28.8314 51.1696 30.2437 49.6285ZM27.755 56.687H33.4568C33.5731 57.3693 33.8577 57.9987 34.2681 58.5367L30.2328 62.3596C28.8217 60.8148 27.9149 58.8474 27.755 56.687ZM37.2629 65.7051C34.981 65.5509 32.904 64.6885 31.2743 63.3479L35.3105 59.5242C35.8784 59.913 36.5427 60.1825 37.2629 60.2928V65.7051ZM37.2629 58.8561V58.8662C36.9448 58.793 36.6462 58.6739 36.3742 58.5163L36.3812 58.5097C35.9557 58.2639 35.5983 57.9253 35.3388 57.522L35.332 57.5285C35.1657 57.2709 35.0399 56.9881 34.9626 56.6867H34.9732C34.9157 56.4625 34.882 56.2295 34.882 55.9885C34.882 55.7474 34.9159 55.5144 34.9732 55.2902H34.9626C35.0399 54.9889 35.1655 54.7062 35.332 54.4485L35.3388 54.455C35.5983 54.0519 35.9559 53.7132 36.3812 53.4675L36.3742 53.4608C36.6462 53.3033 36.9448 53.1841 37.2629 53.1109V53.1211C37.4997 53.0667 37.7456 53.0346 38.0001 53.0346C38.2547 53.0346 38.5006 53.0667 38.7374 53.1211V53.1109C39.0555 53.1842 39.3539 53.3031 39.6258 53.4607L39.6188 53.4674C40.0444 53.713 40.4018 54.0518 40.6613 54.4549L40.6682 54.4484C40.8346 54.706 40.9603 54.9889 41.0377 55.2903H41.0271C41.0845 55.5145 41.1183 55.7476 41.1183 55.9886C41.1183 56.2296 41.0844 56.4627 41.0271 56.6869H41.0377C40.9603 56.9883 40.8348 57.2711 40.6682 57.5288L40.6613 57.5223C40.4018 57.9254 40.0443 58.264 39.6188 58.5098L39.6258 58.5163C39.3539 58.6739 39.0555 58.793 38.7374 58.8662V58.8561C38.5006 58.9105 38.2547 58.9426 38.0001 58.9426C37.7456 58.9426 37.4997 58.9107 37.2629 58.8561ZM38.7372 65.7051V60.2928C39.4574 60.1825 40.1216 59.913 40.6895 59.5244L44.7255 63.3479C43.096 64.6885 41.019 65.5509 38.7372 65.7051ZM45.7671 62.3596L41.732 58.5368C42.1424 57.9988 42.4268 57.3694 42.5434 56.687H48.2451C48.0851 58.8474 47.1784 60.8148 45.7671 62.3596Z',
+            );
             iconpPath5.setAttribute('fill', `var(--light-gray)`);
             carIcon.append(iconpPath5);
 
@@ -362,7 +376,7 @@ async function renderCarsInGarage(){
         let removeBtn = divCarBlock.getElementsByClassName('remove button')[0];
         selectBtn.addEventListener('click', selectBtnClickHandling);
         removeBtn.addEventListener('click', removetBtnClickHandling);
-    })
+    });
 
     document.getElementsByClassName('page-garage')[0].after(fragmentCarsBlock);
 }
@@ -370,39 +384,48 @@ renderCarsInGarage();
 /*//Car rendering in Garage view from DB*/
 
 /*selectBtnClickHandling callback*/
-function selectBtnClickHandling(event){
+function selectBtnClickHandling(event) {
     let selectBtn = event.currentTarget;
-    function renderHighlightedTrackBlock(elem){
+    function renderHighlightedTrackBlock(elem) {
         let allTrackBlocks = document.getElementsByClassName('track-block');
-        Array.from(allTrackBlocks).forEach(el => el.classList.contains('selected')? el.classList.remove('selected'): 1);
-        elem.parentNode.parentNode.classList.add('selected')
+        Array.from(allTrackBlocks).forEach((el) =>
+            el.classList.contains('selected')
+                ? el.classList.remove('selected')
+                : 1,
+        );
+        elem.parentNode.parentNode.classList.add('selected');
     }
     renderHighlightedTrackBlock(selectBtn);
 
-
-    let selectedCarName = selectBtn.parentNode.parentNode.getElementsByClassName('car-name')[0].innerHTML;
-    let selectedCarColor = selectBtn.parentNode.parentNode.getElementsByTagName('path')[0].getAttribute('fill');
+    let selectedCarName =
+        selectBtn.parentNode.parentNode.getElementsByClassName('car-name')[0]
+            .innerHTML;
+    let selectedCarColor = selectBtn.parentNode.parentNode
+        .getElementsByTagName('path')[0]
+        .getAttribute('fill');
 
     let inputUpdateNameElem = document.getElementsByClassName('input-text')[1];
     inputUpdateNameElem.value = `${selectedCarName}`;
-    let inputUpdateNameColorElem = document.getElementsByClassName('input-color')[1];
+    let inputUpdateNameColorElem =
+        document.getElementsByClassName('input-color')[1];
     inputUpdateNameColorElem.value = `${selectedCarColor}`;
 }
 /*//selectBtnClickHandling callback*/
 
 /*removetBtnClickHandling callback*/
-async function removetBtnClickHandling(event){
+async function removetBtnClickHandling(event) {
     let removeBtn = event.currentTarget;
     let carBlockElem = removeBtn.parentNode.parentNode;
-    let currentCarId = carBlockElem.getAttribute('id')
+    let currentCarId = carBlockElem.getAttribute('id');
 
     await ServerRequest.deleteCar(currentCarId);
-    if((await ServerRequest.getWinner(currentCarId))) await ServerRequest.deleteWinner(currentCarId);
+    try {
+        await ServerRequest.deleteWinner(currentCarId);
+    } catch {
+        console.log('No such car in Winners');
+    }
 
-    renderCarAmountInGarage();
     renderCarsInGarage();
-    renderCarAmountInWinnersTable();
-    renderWinnersInTable();
 }
 /*//removetBtnClickHandling callback*/
 
@@ -410,111 +433,58 @@ async function removetBtnClickHandling(event){
 let createBtn = document.getElementsByClassName('create')[0];
 createBtn.addEventListener('click', createNewCarHandler);
 
-async function createNewCarHandler(event){
+async function createNewCarHandler(event) {
     let formCreate = document.getElementsByClassName('form-create')[0];
     let newCarName = formCreate.getElementsByClassName('input-text')[0].value;
     let newCarColor = formCreate.getElementsByClassName('input-color')[0].value;
 
-
-    if(newCarName){
-        await ServerRequest.createCar(newCarName, newCarColor)
-        renderUpdatedCarInGarage();
+    if (newCarName) {
+        await ServerRequest.createCar(newCarName, newCarColor);
+        renderCarsInGarage();
     }
-    renderCarAmountInGarage();
 }
 /*//Car creating by clicking button CREATE in Garage view*/
 
-
 /*Car undating by clicking button UPDATE in Garage view*/
-async function renderUpdatedCarInGarage(){
-    await renderCarsInGarage();
-
-    let selectCarBtns = document.getElementsByClassName('select');
-    // console.log(selectCarBtns);
-
-    Array.from(selectCarBtns).forEach(btn =>{
-        btn.addEventListener('click', function updateSelectedCarHandler(){
-            let trackBlock = btn.parentNode.parentNode;
-
-            function renderHighlightedTrackBlock(elem){
-                let allTrackBlocks = document.getElementsByClassName('track-block');
-                Array.from(allTrackBlocks).forEach(el => el.classList.contains('selected')? el.classList.remove('selected'): 1);
-                elem.parentNode.parentNode.classList.add('selected')
-            }
-            renderHighlightedTrackBlock(btn);
-
-
-            let selectedCarName = btn.parentNode.getElementsByClassName('car-name')[0].innerHTML;
-            let selectedCarColor = btn.parentNode.parentNode.getElementsByTagName('path')[0].getAttribute('fill');
-
-            let inputUpdateNameElem = document.getElementsByClassName('input-text')[1];
-            inputUpdateNameElem.setAttribute('value',`${selectedCarName}`);
-            let inputUpdateNameColorElem = document.getElementsByClassName('input-color')[1];
-            inputUpdateNameColorElem.setAttribute('value',`${selectedCarColor}`);
-        });
-    })
-}
-// renderUpdatedCarInGarage();
 
 let updateBtn = document.getElementsByClassName('update')[0];
 updateBtn.addEventListener('click', updateSelectedCarHandler);
 
-async function updateSelectedCarHandler(event){
-        // console.log(document.getElementsByClassName('selected'));
+async function updateSelectedCarHandler(event) {
+    if (document.getElementsByClassName('selected').length) {
+        let currentCarId = document
+            .getElementsByClassName('selected')[0]
+            .getAttribute('id');
+        let currentInputUpdateNameElem =
+            document.getElementsByClassName('input-text')[1];
+        let currentInputUpdateColorElem =
+            document.getElementsByClassName('input-color')[1];
+        let currentCarName = currentInputUpdateNameElem.value;
+        let currentCarColor = currentInputUpdateColorElem.value;
 
-        if(document.getElementsByClassName('selected').length){
-            let currentInputUpdateNameElem = document.getElementsByClassName('input-text')[1];
-            let currentCarName = currentInputUpdateNameElem.value;
-            let currentInputUpdateColorElem = document.getElementsByClassName('input-color')[1];
-            let currentCarColor = currentInputUpdateColorElem.value;
-            let currentCarId = document.getElementsByClassName('selected')[0].getAttribute('id');
-
-            let urlPutGarage = `http://127.0.0.1:3000/garage/${currentCarId}`;
-            let urlPutTable = `http://127.0.0.1:3000/winners/${currentCarId}`;
-            let bodyStr = JSON.stringify({name: `${currentCarName}`, color: `${currentCarColor}`});
-
-            function isCurrentCarInWinnersTable(carId){
-                let result = false;
-                let winnerRowArr = Array.from(document.getElementsByClassName('th-number'));
-                winnerRowArr.forEach(elem => elem.innerHTML === carId ? result=true : result=false);
-                return result;
-            }
-
-            await putDataToDB(urlPutGarage, bodyStr);
-            if(isCurrentCarInWinnersTable(currentCarId)) await putDataToDB(urlPutTable, bodyStr);
-
-            renderCarsInGarage();
-            renderWinnersInTable();
-
-        } else{
-            alert('Please select the car you want to update.');
-        }
+        await ServerRequest.updateCar(
+            currentCarId,
+            currentCarName,
+            currentCarColor,
+        );
+        renderCarsInGarage();
+    } else {
+        alert('Please select the car you want to update.');
+    }
 }
 /*//Car undating by clicking button UPDATE in Garage view*/
 
-
-/*Rendering amount of cars in the GARAGE in Garage view*/
-async function renderCarAmountInGarage(){
-    let carsInGarageArr = await ServerRequest.getCars();
-    let carsAmount = carsInGarageArr.length;
-    document.getElementsByClassName('cars-in-garage')[0].innerHTML = carsAmount;
-}
-renderCarAmountInGarage();
-/*//Rendering amount of cars in the GARAGE in Garage view*/
-            /*//GARAGE VIEW - RENDERING */
+/*//GARAGE VIEW - RENDERING */
 
 /*----------------//GARAGE view--------------------*/
 
-
-
-
 /*----------------WINNERS view--------------------*/
-function getWinnersViewContent(){
+function getWinnersViewContent() {
     const fragmentWinnersViewContent = document.createDocumentFragment();
 
     let divWinnersViewContent = document.createElement('div');
     divWinnersViewContent.className = 'winners-content hide';
-    fragmentWinnersViewContent.append(divWinnersViewContent)
+    fragmentWinnersViewContent.append(divWinnersViewContent);
 
     return fragmentWinnersViewContent;
 }
@@ -522,26 +492,28 @@ function getWinnersViewContent(){
 let winnersViewContent = getWinnersViewContent();
 document.body.append(winnersViewContent);
 
-function getWinnersPageInfoFragment(){
+function getWinnersPageInfoFragment() {
     const fragmentWinnersPageInfo = document.createDocumentFragment();
 
-    let divWinners = document.createElement("div");
-    divWinners.className ='winners';
-    divWinners.innerHTML ='Winners (<span class="winners-amount"></span>)';
+    let divWinners = document.createElement('div');
+    divWinners.className = 'winners';
+    divWinners.innerHTML = 'Winners (<span class="winners-amount"></span>)';
     fragmentWinnersPageInfo.append(divWinners);
 
-    let divPageWinners = document.createElement("div");
-    divPageWinners.className ='page-winners';
-    divPageWinners.innerHTML ='Page #<span class="page-number"></span>';
+    let divPageWinners = document.createElement('div');
+    divPageWinners.className = 'page-winners';
+    divPageWinners.innerHTML = 'Page #<span class="page-number"></span>';
     fragmentWinnersPageInfo.append(divPageWinners);
 
     return fragmentWinnersPageInfo;
 }
 
 let pageWinnersInfoFragment = getWinnersPageInfoFragment();
-document.getElementsByClassName('winners-content')[0].append(pageWinnersInfoFragment);
+document
+    .getElementsByClassName('winners-content')[0]
+    .append(pageWinnersInfoFragment);
 
-function getTableOfWinners(){
+function getTableOfWinners() {
     let fragmentTableOfWinners = document.createDocumentFragment();
 
     let table = document.createElement('table');
@@ -589,10 +561,13 @@ function getTableOfWinners(){
 }
 
 let tableOfWinnersFragment = getTableOfWinners();
-document.getElementsByClassName('winners-content')[0].append(tableOfWinnersFragment);
+document
+    .getElementsByClassName('winners-content')[0]
+    .append(tableOfWinnersFragment);
 
-function getPaginationNavigationWinners(){
-    const fragmentPaginationNavigationWinners = document.createDocumentFragment();
+function getPaginationNavigationWinners() {
+    const fragmentPaginationNavigationWinners =
+        document.createDocumentFragment();
 
     let divPaginationNavigationWinners = document.createElement('div');
     divPaginationNavigationWinners.className = 'pagination-navigation';
@@ -607,7 +582,6 @@ function getPaginationNavigationWinners(){
     btnToPrev.prepend(linkToPrev);
     divPaginationNavigationWinners.append(btnToPrev);
 
-
     let btnToNext = document.createElement('div');
     btnToNext.className = 'to-next button gray';
     let linkToNext = document.createElement('a');
@@ -621,40 +595,38 @@ function getPaginationNavigationWinners(){
 }
 
 let paginationNavigationWinners = getPaginationNavigationWinners();
-document.getElementsByClassName('winners-content')[0].append(paginationNavigationWinners);
+document
+    .getElementsByClassName('winners-content')[0]
+    .append(paginationNavigationWinners);
 
-            /*WINNNERS VIEW - RENDERING */
-// /*Rendering amount of winners in the WINNERS view*/
-// async function renderWinnersAmount(){
-//     let winnersArr = await ServerRequest.getWinners();
-//     let winnersAmount = winnersArr.length;
-//     document.getElementsByClassName('winners-amount')[0].innerHTML = winnersAmount;
-// }
-// renderWinnersAmount();
-// /*//Rendering amount of winners in the WINNERS view*/
-
+/*WINNNERS VIEW - RENDERING */
 /*Car rendering in Winners view from DB*/
-async function renderWinnersInTable(){
+async function renderWinnersInTable() {
     let winnersRows = document.getElementsByClassName('tr-row');
-    while(winnersRows.length > 0){
+    while (winnersRows.length > 0) {
         winnersRows[0].parentNode.removeChild(winnersRows[0]);
     }
 
-    let carsInGarageArr = await ServerRequest.getWinners();
-    // console.log(carsInGarageArr);
+    let winnersInTable = await ServerRequest.getWinners();
+    let winnersInTableArr = await winnersInTable.data;
+    // console.log(winnersInTableArr);
+
+    // Rendering amount of cars in the table of the WINNERS view
+    document.getElementsByClassName('winners-amount')[0].innerHTML =
+        winnersInTable.totalCount;
 
     let fragmentCarRowsInTable = document.createDocumentFragment();
     let tbody = document.getElementsByClassName('tbody')[0];
 
-    carsInGarageArr.forEach((elem,index) => {
-        function getName(id){
+    winnersInTableArr.forEach((elem, index) => {
+        function getName(id) {
             let car = document.getElementById(id);
             let carName = car.querySelector('.car-name');
             return carName.innerHTML;
         }
         let carName = getName(elem.id);
 
-        function getCarIcon(id){
+        function getCarIcon(id) {
             let fragmentCarIcon = document.createDocumentFragment();
             let carBlock = document.getElementById(id);
             let carIcon = carBlock.getElementsByClassName('car-image')[0];
@@ -692,45 +664,43 @@ async function renderWinnersInTable(){
         thBestTime.className = 'th-BestTime';
         thBestTime.innerHTML = `${elem.time}`;
         tr.append(thBestTime);
-    })
+    });
     tbody.append(fragmentCarRowsInTable);
 }
-
-renderWinnersInTable();
-
 /*//Car rendering in Winners view from DB*/
-
-/*Rendering amount of cars in the table of the WINNERS view*/
-async function renderCarAmountInWinnersTable(){
-    let winnersInTableArr = await ServerRequest.getWinners();
-    let winnersAmount = winnersInTableArr.length;
-    document.getElementsByClassName('winners-amount')[0].innerHTML = winnersAmount;
-}
-renderCarAmountInWinnersTable();
-/*//Rendering amount of cars in the table of the WINNERS view*/
-            /*//WINNNERS VIEW - RENDERING */
+/*//WINNNERS VIEW - RENDERING */
 
 /*---------------//WINNERS view----------------------*/
 
-
-
-
-
 /*Toggling between GARAGE and WINNERS views*/
-let btnToGarage = document.getElementsByClassName("to-garage button")[0];
-let btnToWinners = document.getElementsByClassName("to-winners button")[0];
+let btnToGarage = document.getElementsByClassName('to-garage button')[0];
+let btnToWinners = document.getElementsByClassName('to-winners button')[0];
 
 btnToGarage.addEventListener('click', () => {
-    if(document.getElementsByClassName('garage-content')[0].classList.contains("hide")){
-        document.getElementsByClassName('garage-content')[0].classList.remove("hide");
+    if (
+        document
+            .getElementsByClassName('garage-content')[0]
+            .classList.contains('hide')
+    ) {
+        document
+            .getElementsByClassName('garage-content')[0]
+            .classList.remove('hide');
     }
-    document.getElementsByClassName('winners-content')[0].classList.add("hide");
-})
+    document.getElementsByClassName('winners-content')[0].classList.add('hide');
+    renderCarsInGarage();
+});
 
 btnToWinners.addEventListener('click', () => {
-    if(document.getElementsByClassName('winners-content')[0].classList.contains("hide")){
-        document.getElementsByClassName('winners-content')[0].classList.remove("hide");
+    if (
+        document
+            .getElementsByClassName('winners-content')[0]
+            .classList.contains('hide')
+    ) {
+        document
+            .getElementsByClassName('winners-content')[0]
+            .classList.remove('hide');
     }
-    document.getElementsByClassName('garage-content')[0].classList.add("hide");
-})
+    document.getElementsByClassName('garage-content')[0].classList.add('hide');
+    renderWinnersInTable();
+});
 /*//Toggling between GARAGE and WINNERS views*/
