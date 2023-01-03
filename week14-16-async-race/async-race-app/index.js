@@ -1,5 +1,12 @@
-import {ServerRequest} from './serverRequest.js';
+'use strict';
 
+import { ServerRequest } from './serverRequest.js';
+
+const carsNumberPerPageGarage = 7;
+const carsNumberPerPageWinners = 10;
+
+let currentPageGarage = 1;
+let currentPageWinners = 1;
 
 function getNavigationMenu() {
     const fragmentNavigationMenu = document.createDocumentFragment();
@@ -182,13 +189,12 @@ document
     .getElementsByClassName('garage-content')[0]
     .append(pageGarageInfoFragment);
 
-function getPaginationNavigationGarage() {
-    const fragmentPaginationNavigationGarage =
-        document.createDocumentFragment();
+function getPaginationNavigation(isGarage) {
+    const fragmentPaginationNavigation = document.createDocumentFragment();
 
-    let divPaginationNavigationGarage = document.createElement('div');
-    divPaginationNavigationGarage.className = 'pagination-navigation';
-    fragmentPaginationNavigationGarage.append(divPaginationNavigationGarage);
+    let divPaginationNavigation = document.createElement('div');
+    divPaginationNavigation.className = 'pagination-navigation';
+    fragmentPaginationNavigation.append(divPaginationNavigation);
 
     let btnToPrev = document.createElement('div');
     btnToPrev.className = 'to-prev button gray';
@@ -197,7 +203,9 @@ function getPaginationNavigationGarage() {
     linkToPrev.setAttribute('href', '#');
     linkToPrev.innerHTML = 'prev';
     btnToPrev.prepend(linkToPrev);
-    divPaginationNavigationGarage.append(btnToPrev);
+    divPaginationNavigation.append(btnToPrev);
+
+    btnToPrev.addEventListener('click', isGarage ? toPrevPageHandlerGarage: toPrevPageHandlerWinners);
 
     let btnToNext = document.createElement('div');
     btnToNext.className = 'to-next button gray';
@@ -206,12 +214,47 @@ function getPaginationNavigationGarage() {
     linkToNext.setAttribute('href', '#');
     linkToNext.innerHTML = 'next';
     btnToNext.prepend(linkToNext);
-    divPaginationNavigationGarage.append(btnToNext);
+    divPaginationNavigation.append(btnToNext);
 
-    return fragmentPaginationNavigationGarage;
+    btnToNext.addEventListener('click', isGarage ? toNextPageHandlerGarage: toNextPageHandlerWinners);
+
+
+    return fragmentPaginationNavigation;
 }
 
-let paginationNavigationGarage = getPaginationNavigationGarage();
+function toPrevPageHandlerGarage(event) {
+    if(currentPageGarage > 1){
+        currentPageGarage -= 1;
+        renderCarsInGarage();
+    }
+}
+
+function toNextPageHandlerGarage(event) {
+    let totalCars = document.getElementsByClassName('cars-in-garage')[0].innerHTML;
+    let pageCount =  Math.ceil(totalCars / carsNumberPerPageGarage);
+    if(currentPageGarage < pageCount){
+        currentPageGarage += 1;
+        renderCarsInGarage();
+    }
+}
+
+function toPrevPageHandlerWinners(event) {
+    if(currentPageWinners > 1){
+        currentPageWinners -= 1;
+        renderWinnersInTable();
+    }
+}
+
+function toNextPageHandlerWinners(event) {
+    let totalWinners = document.getElementsByClassName('winners-amount')[0].innerHTML;
+    let pageCount =  Math.ceil(totalWinners / carsNumberPerPageWinners);
+    if(currentPageWinners < pageCount){
+        currentPageWinners += 1;
+        renderWinnersInTable();
+    }
+}
+
+let paginationNavigationGarage = getPaginationNavigation(true);
 document
     .getElementsByClassName('garage-content')[0]
     .append(paginationNavigationGarage);
@@ -219,12 +262,15 @@ document
 /*GARAGE VIEW - RENDERING */
 /*Car rendering in Garage view from DB*/
 async function renderCarsInGarage() {
-    let carsInGarageResponse = await ServerRequest.getCars();
+    let carsInGarageResponse = await ServerRequest.getCars(currentPageGarage, carsNumberPerPageGarage);
     let carsInGarageArr = await carsInGarageResponse.data;
 
     // Rendering amount of cars in the Garage
     document.getElementsByClassName('cars-in-garage')[0].innerHTML =
         carsInGarageResponse.totalCount;
+
+    // Rendering page in the Garage
+    document.getElementsByClassName('page-number')[0].innerHTML = currentPageGarage;
 
     let trackBlockList = document.getElementsByClassName('track-block');
     while (trackBlockList.length > 0) {
@@ -565,36 +611,7 @@ document
     .getElementsByClassName('winners-content')[0]
     .append(tableOfWinnersFragment);
 
-function getPaginationNavigationWinners() {
-    const fragmentPaginationNavigationWinners =
-        document.createDocumentFragment();
-
-    let divPaginationNavigationWinners = document.createElement('div');
-    divPaginationNavigationWinners.className = 'pagination-navigation';
-    fragmentPaginationNavigationWinners.append(divPaginationNavigationWinners);
-
-    let btnToPrev = document.createElement('div');
-    btnToPrev.className = 'to-prev button gray';
-    let linkToPrev = document.createElement('a');
-    linkToPrev.className = 'button-gray';
-    linkToPrev.setAttribute('href', '#');
-    linkToPrev.innerHTML = 'prev';
-    btnToPrev.prepend(linkToPrev);
-    divPaginationNavigationWinners.append(btnToPrev);
-
-    let btnToNext = document.createElement('div');
-    btnToNext.className = 'to-next button gray';
-    let linkToNext = document.createElement('a');
-    linkToNext.className = 'button-gray';
-    linkToNext.setAttribute('href', '#');
-    linkToNext.innerHTML = 'next';
-    btnToNext.prepend(linkToNext);
-    divPaginationNavigationWinners.append(btnToNext);
-
-    return fragmentPaginationNavigationWinners;
-}
-
-let paginationNavigationWinners = getPaginationNavigationWinners();
+let paginationNavigationWinners = getPaginationNavigation(false);
 document
     .getElementsByClassName('winners-content')[0]
     .append(paginationNavigationWinners);
@@ -607,13 +624,16 @@ async function renderWinnersInTable() {
         winnersRows[0].parentNode.removeChild(winnersRows[0]);
     }
 
-    let winnersInTable = await ServerRequest.getWinners();
+    let winnersInTable = await ServerRequest.getWinners(currentPageWinners, carsNumberPerPageWinners);
     let winnersInTableArr = await winnersInTable.data;
     // console.log(winnersInTableArr);
 
     // Rendering amount of cars in the table of the WINNERS view
     document.getElementsByClassName('winners-amount')[0].innerHTML =
         winnersInTable.totalCount;
+
+    // Rendering page in the Winners
+    document.getElementsByClassName('page-number')[1].innerHTML = currentPageGarage;
 
     let fragmentCarRowsInTable = document.createDocumentFragment();
     let tbody = document.getElementsByClassName('tbody')[0];

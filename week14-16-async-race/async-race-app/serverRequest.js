@@ -32,7 +32,7 @@ async function sendRequest(urlStr, methodStr, bodyStr = '') {
 
 class ServerRequest {
     /*GARAGE */
-    static async getCars(page = 1, limit = 0) {
+    static async getCars(page = 1, limit = 7) {
         let urlStr =
             serverURL +
             'garage' +
@@ -74,7 +74,7 @@ class ServerRequest {
 
     /*WINNERS */
 
-    static async getWinners(page = 1, limit = 0, sort = '', order = '') {
+    static async getWinners(page = 1, limit = 10, sort = '', order = '') {
         let urlStr =
             serverURL +
             'winners' +
