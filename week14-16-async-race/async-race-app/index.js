@@ -162,11 +162,63 @@ function getTaskbarFragment() {
     btnGenerateCars.prepend(GenerateCars);
     divTaskbar.append(btnGenerateCars);
 
+    btnGenerateCars.addEventListener('click', generateCarHandler);
+
     return fragmentTaskbar;
 }
 
 let taskbarFragment = getTaskbarFragment();
 document.getElementsByClassName('garage-content')[0].append(taskbarFragment);
+
+async function generateCarHandler() {
+    let randomNamePart1Arr = [
+        'Tesla',
+        'Ford',
+        'Mazda',
+        'Volvo',
+        'Mercedes',
+        'Audi',
+        'Honda',
+        'Kia',
+        'Peugeot',
+        'Jaguar',
+    ];
+    let randomNamePart2Arr = [
+        'Mustang',
+        'Corvette',
+        'Camaro',
+        'Corolla',
+        'Viper',
+        'A3',
+        'Cherokee',
+        'Ria',
+        '5008',
+        'Rav4',
+    ];
+
+    for (let i = 0; i < 100; i++) {
+        let randomNamePart1 = randomNamePart1Arr[getRandomNumber(0, 10)];
+        let randomNamePart2 = randomNamePart2Arr[getRandomNumber(0, 10)];
+        let randomName = `${randomNamePart1} ${randomNamePart2}`;
+        let randomColor = getRandomColor();
+
+        await ServerRequest.createCar(randomName, randomColor);
+    }
+    renderCarsInGarage();
+}
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function getRandomNumber(from, to) {
+    return Math.floor(Math.random() * (to - from)) + from;
+}
 
 function getGaragePageInfoFragment() {
     const fragmentGaragePageInfo = document.createDocumentFragment();
@@ -205,7 +257,10 @@ function getPaginationNavigation(isGarage) {
     btnToPrev.prepend(linkToPrev);
     divPaginationNavigation.append(btnToPrev);
 
-    btnToPrev.addEventListener('click', isGarage ? toPrevPageHandlerGarage: toPrevPageHandlerWinners);
+    btnToPrev.addEventListener(
+        'click',
+        isGarage ? toPrevPageHandlerGarage : toPrevPageHandlerWinners,
+    );
 
     let btnToNext = document.createElement('div');
     btnToNext.className = 'to-next button gray';
@@ -216,39 +271,43 @@ function getPaginationNavigation(isGarage) {
     btnToNext.prepend(linkToNext);
     divPaginationNavigation.append(btnToNext);
 
-    btnToNext.addEventListener('click', isGarage ? toNextPageHandlerGarage: toNextPageHandlerWinners);
-
+    btnToNext.addEventListener(
+        'click',
+        isGarage ? toNextPageHandlerGarage : toNextPageHandlerWinners,
+    );
 
     return fragmentPaginationNavigation;
 }
 
 function toPrevPageHandlerGarage(event) {
-    if(currentPageGarage > 1){
+    if (currentPageGarage > 1) {
         currentPageGarage -= 1;
         renderCarsInGarage();
     }
 }
 
 function toNextPageHandlerGarage(event) {
-    let totalCars = document.getElementsByClassName('cars-in-garage')[0].innerHTML;
-    let pageCount =  Math.ceil(totalCars / carsNumberPerPageGarage);
-    if(currentPageGarage < pageCount){
+    let totalCars =
+        document.getElementsByClassName('cars-in-garage')[0].innerHTML;
+    let pageCount = Math.ceil(totalCars / carsNumberPerPageGarage);
+    if (currentPageGarage < pageCount) {
         currentPageGarage += 1;
         renderCarsInGarage();
     }
 }
 
 function toPrevPageHandlerWinners(event) {
-    if(currentPageWinners > 1){
+    if (currentPageWinners > 1) {
         currentPageWinners -= 1;
         renderWinnersInTable();
     }
 }
 
 function toNextPageHandlerWinners(event) {
-    let totalWinners = document.getElementsByClassName('winners-amount')[0].innerHTML;
-    let pageCount =  Math.ceil(totalWinners / carsNumberPerPageWinners);
-    if(currentPageWinners < pageCount){
+    let totalWinners =
+        document.getElementsByClassName('winners-amount')[0].innerHTML;
+    let pageCount = Math.ceil(totalWinners / carsNumberPerPageWinners);
+    if (currentPageWinners < pageCount) {
         currentPageWinners += 1;
         renderWinnersInTable();
     }
@@ -262,15 +321,22 @@ document
 /*GARAGE VIEW - RENDERING */
 /*Car rendering in Garage view from DB*/
 async function renderCarsInGarage() {
-    let carsInGarageResponse = await ServerRequest.getCars(currentPageGarage, carsNumberPerPageGarage);
+    let carsInGarageResponse = await ServerRequest.getCars(
+        currentPageGarage,
+        carsNumberPerPageGarage,
+    );
     let carsInGarageArr = await carsInGarageResponse.data;
+    let pagesQuantity =
+        Math.ceil(carsInGarageResponse.totalCount / carsNumberPerPageGarage);
 
     // Rendering amount of cars in the Garage
     document.getElementsByClassName('cars-in-garage')[0].innerHTML =
         carsInGarageResponse.totalCount;
 
-    // Rendering page in the Garage
-    document.getElementsByClassName('page-number')[0].innerHTML = currentPageGarage;
+    // Rendering page and total number of pages in the Garage
+    document.getElementsByClassName(
+        'page-number',
+    )[0].innerHTML = `${currentPageGarage}/${pagesQuantity}`;
 
     let trackBlockList = document.getElementsByClassName('track-block');
     while (trackBlockList.length > 0) {
@@ -626,7 +692,6 @@ async function renderWinnersInTable() {
 
     let winnersInTable = await ServerRequest.getWinners(currentPageWinners, carsNumberPerPageWinners);
     let winnersInTableArr = await winnersInTable.data;
-    // console.log(winnersInTableArr);
 
     // Rendering amount of cars in the table of the WINNERS view
     document.getElementsByClassName('winners-amount')[0].innerHTML =
@@ -646,7 +711,7 @@ async function renderWinnersInTable() {
         }
         let carName = getName(elem.id);
 
-        function getCarIcon(id) {
+        function getCarIconFragment(id) {
             let fragmentCarIcon = document.createDocumentFragment();
             let carBlock = document.getElementById(id);
             let carIcon = carBlock.getElementsByClassName('car-image')[0];
@@ -654,7 +719,7 @@ async function renderWinnersInTable() {
             fragmentCarIcon.append(carIconClone);
             return fragmentCarIcon;
         }
-        let carIcon = getCarIcon(elem.id);
+        let carIcon = getCarIconFragment(elem.id);
 
         let tr = document.createElement('tr');
         tr.className = 'tr-row';
