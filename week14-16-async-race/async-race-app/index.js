@@ -249,7 +249,7 @@ function getPaginationNavigation(isGarage) {
     fragmentPaginationNavigation.append(divPaginationNavigation);
 
     let btnToPrev = document.createElement('div');
-    btnToPrev.className = 'to-prev button gray';
+    btnToPrev.className = 'to-prev button yelow';
     let linkToPrev = document.createElement('a');
     linkToPrev.className = 'button-gray';
     linkToPrev.setAttribute('href', '#');
@@ -263,7 +263,7 @@ function getPaginationNavigation(isGarage) {
     );
 
     let btnToNext = document.createElement('div');
-    btnToNext.className = 'to-next button gray';
+    btnToNext.className = 'to-next button yelow';
     let linkToNext = document.createElement('a');
     linkToNext.className = 'button-gray';
     linkToNext.setAttribute('href', '#');
