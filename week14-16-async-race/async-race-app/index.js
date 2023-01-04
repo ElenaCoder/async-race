@@ -393,14 +393,18 @@ async function renderCarsInGarage() {
             btnStart.prepend(linkStart);
             divBlockControlPanel.append(btnStart);
 
+            btnStart.addEventListener('click', startCarEngineHandler);
+
             let btnStop = document.createElement('div');
-            btnStop.className = 'button yellow small';
+            btnStop.className = 'button yellow small disable';
             let linkStop = document.createElement('a');
             linkStop.className = 'button-stop';
             linkStop.setAttribute('href', '#');
             linkStop.innerHTML = '&#9724;';
             btnStop.prepend(linkStop);
             divBlockControlPanel.append(btnStop);
+
+            btnStop.addEventListener('click', stopCarEngineHandler);
         }
         createNavigationInCarBlockFragment(elem, divCarBlock);
 
@@ -432,13 +436,61 @@ async function renderCarsInGarage() {
 renderCarsInGarage();
 /*//Car rendering in Garage view from DB*/
 
-function createCarIcon(color){
+async function startCarEngineHandler(event) {
+    let carIconElem =
+        event.currentTarget.parentNode.nextElementSibling.firstElementChild;
+    const carId = event.currentTarget.parentNode.parentNode.getAttribute('id');
+    let currentStartBtn = event.currentTarget.parentNode.firstElementChild;
+    let currentStopBtn = event.currentTarget.parentNode.lastElementChild;
+
+    if (currentStartBtn.classList.contains('disable')) {
+        return;
+    }
+
+    let response = await ServerRequest.startCarEngine(carId);
+    let time = response.distance / response.velocity;
+
+    let carAnimation = carIconElem.animate(
+        [
+            // key frames
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(82vw)' },
+        ],
+        {
+            // sync options
+            duration: time,
+            iterations: 1,
+            easing: 'linear',
+            fill: 'forwards',
+        },
+    );
+
+    currentStartBtn.classList.add('disable');
+    setTimeout(() => currentStartBtn.classList.remove('disable'), time);
+    currentStopBtn.classList.remove('disable');
+    setTimeout(() => currentStopBtn.classList.add('disable'), time);
+
+    try {
+        await ServerRequest.switchtoDriveMode(carId);
+    } catch {
+        carAnimation.pause();
+    }
+}
+
+function stopCarEngineHandler(event) {
+    let carIconElem =
+        event.currentTarget.parentNode.nextElementSibling.firstElementChild;
+    const carId = event.currentTarget.parentNode.parentNode.getAttribute('id');
+    let currentStopBtn = event.currentTarget.parentNode.firstElementChild;
+}
+
+function createCarIcon(color) {
     let carIconFragment = document.createDocumentFragment();
 
     // Create an element within the svg - namespace (NS)
     let carIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     carIcon.classList.add('car-image');
-    carIcon.setAttribute('width', '100');
+    carIcon.setAttribute('width', '80');
     carIcon.setAttribute('height', '40');
     carIcon.setAttribute('viewBox', '0 0 212 76');
     carIcon.setAttribute('fill', 'none');
@@ -711,8 +763,9 @@ async function renderWinnersInTable() {
         winnersInTable.totalCount;
 
     // Rendering page in the Winners
-    document.getElementsByClassName('page-number')[1].innerHTML =
-        `${currentPageWinners}/${pagesQuantity}`;
+    document.getElementsByClassName(
+        'page-number',
+    )[1].innerHTML = `${currentPageWinners}/${pagesQuantity}`;
 
     let fragmentCarRowsInTable = document.createDocumentFragment();
     let tbody = document.getElementsByClassName('tbody')[0];

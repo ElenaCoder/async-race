@@ -22,7 +22,7 @@ async function sendRequest(urlStr, methodStr, bodyStr = '') {
             }
         })
         .catch((error) => {
-            console.log(`Error(${error}): ${urlStr}, ${methodStr}, ${bodyStr}`);
+            console.log(`Error(${error}): ${urlStr}, ${methodStr}, ${bodyStr}.`);
             return null;
         });
     return response;
@@ -69,6 +69,36 @@ class ServerRequest {
         let urlStr = serverURL + `garage/${id}`;
         let bodyStr = JSON.stringify({ name: `${name}`, color: `${color}` });
         let response = await sendRequest(urlStr, 'PUT', bodyStr);
+        return response.json();
+    }
+
+    static async startCarEngine(id) {
+        let urlStr =
+            serverURL +
+            'engine' +
+            '?' +
+            new URLSearchParams({ id: id, status: 'started' });
+        let response = await sendRequest(urlStr, 'PATCH');
+        return response.json();
+    }
+
+    static async stopCarEngine(id) {
+        let urlStr =
+            serverURL +
+            'engine' +
+            '?' +
+            new URLSearchParams({ id: id, status: 'stopped' });
+        let response = await sendRequest(urlStr, 'PATCH');
+        return response.json();
+    }
+
+    static async switchtoDriveMode(id) {
+        let urlStr =
+            serverURL +
+            'engine' +
+            '?' +
+            new URLSearchParams({ id: id, status: 'drive' });
+        let response = await sendRequest(urlStr, 'PATCH');
         return response.json();
     }
 
