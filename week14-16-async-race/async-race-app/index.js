@@ -466,9 +466,9 @@ async function startCarEngineHandler(event) {
     );
 
     currentStartBtn.classList.add('disable');
-    setTimeout(() => currentStartBtn.classList.remove('disable'), time);
+    // setTimeout(() => currentStartBtn.classList.remove('disable'), time);
     currentStopBtn.classList.remove('disable');
-    setTimeout(() => currentStopBtn.classList.add('disable'), time);
+    // setTimeout(() => currentStopBtn.classList.add('disable'), time);
 
     try {
         await ServerRequest.switchtoDriveMode(carId);
@@ -477,11 +477,41 @@ async function startCarEngineHandler(event) {
     }
 }
 
-function stopCarEngineHandler(event) {
+async function stopCarEngineHandler(event) {
     let carIconElem =
         event.currentTarget.parentNode.nextElementSibling.firstElementChild;
     const carId = event.currentTarget.parentNode.parentNode.getAttribute('id');
-    let currentStopBtn = event.currentTarget.parentNode.firstElementChild;
+    let currentStartBtn = event.currentTarget.parentNode.firstElementChild;
+    let currentStopBtn = event.currentTarget.parentNode.lastElementChild;
+
+    if (currentStopBtn.classList.contains('disable')) {
+        return;
+    }
+
+    currentStartBtn.classList.remove('disable');
+    currentStopBtn.classList.add('disable');
+
+    let carCurrentAnimation = carIconElem.getAnimations();
+    if(carCurrentAnimation.length !== 0){
+        carCurrentAnimation[0].cancel();
+    } else {
+        carIconElem.animate(
+            [
+                // key frames
+                { transform: 'translateX(82vw)' },
+                { transform: 'translateX(0)' },
+            ],
+            {
+                // sync options
+                duration: 10,
+                iterations: 1,
+                easing: 'linear',
+                fill: 'forwards',
+            },
+        );
+    }
+
+    await ServerRequest.stopCarEngine(carId);
 }
 
 function createCarIcon(color) {
@@ -491,7 +521,7 @@ function createCarIcon(color) {
     let carIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     carIcon.classList.add('car-image');
     carIcon.setAttribute('width', '80');
-    carIcon.setAttribute('height', '40');
+    carIcon.setAttribute('height', '30');
     carIcon.setAttribute('viewBox', '0 0 212 76');
     carIcon.setAttribute('fill', 'none');
     carIconFragment.append(carIcon);
