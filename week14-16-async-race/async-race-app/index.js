@@ -145,7 +145,7 @@ function getTaskbarFragment() {
     divTaskbar.append(btnRace);
 
     let btnReset = document.createElement('div');
-    btnReset.className = 'button reset gray';
+    btnReset.className = 'button reset gray disable';
     let linkReset = document.createElement('a');
     linkReset.className = 'button-gray';
     linkReset.setAttribute('href', '#');
@@ -492,7 +492,7 @@ async function stopCarEngineHandler(event) {
     currentStopBtn.classList.add('disable');
 
     let carCurrentAnimation = carIconElem.getAnimations();
-    if(carCurrentAnimation.length !== 0){
+    if (carCurrentAnimation.length !== 0) {
         carCurrentAnimation[0].cancel();
     } else {
         carIconElem.animate(
@@ -646,7 +646,7 @@ async function createNewCarHandler(event) {
 }
 /*//Car creating by clicking button CREATE in Garage view*/
 
-/*Car undating by clicking button UPDATE in Garage view*/
+/*Car updating by clicking button UPDATE in Garage view*/
 
 let updateBtn = document.getElementsByClassName('update')[0];
 updateBtn.addEventListener('click', updateSelectedCarHandler);
@@ -673,7 +673,45 @@ async function updateSelectedCarHandler(event) {
         alert('Please select the car you want to update.');
     }
 }
-/*//Car undating by clicking button UPDATE in Garage view*/
+/*//Car updating by clicking button UPDATE in Garage view*/
+
+/*All car race launching by clicking RACE btn in Garage view*/
+let raceBtn = document.getElementsByClassName('race')[0];
+raceBtn.addEventListener('click', raceLaunchHandler);
+
+async function raceLaunchHandler(event) {
+    let resetBtn = document.getElementsByClassName('reset')[0];
+
+    if (event.currentTarget.classList.contains('disable')) {
+        return;
+    }
+
+    let allStartBtns = document.querySelectorAll('.button-start');
+    allStartBtns.forEach((elem) => elem.click());
+
+    event.currentTarget.classList.add('disable');
+    resetBtn.classList.remove('disable');
+}
+/*//All car race launching by clicking RACE btn in Garage view*/
+
+/*All car race reseting by clicking RESET btn in Garage view*/
+let resetBtn = document.getElementsByClassName('reset')[0];
+resetBtn.addEventListener('click', raceResetHandler);
+
+async function raceResetHandler(event) {
+    let raceBtn = document.getElementsByClassName('race')[0];
+
+    if (event.currentTarget.classList.contains('disable')) {
+        return;
+    }
+
+    let allStopBtns = document.querySelectorAll('.button-stop');
+    allStopBtns.forEach((elem) => elem.click());
+
+    raceBtn.classList.remove('disable');
+    event.currentTarget.classList.add('disable');
+}
+/*//All car race reseting by clicking RESET btn in Garage view*/
 
 /*//GARAGE VIEW - RENDERING */
 
