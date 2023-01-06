@@ -8,6 +8,9 @@ const carsNumberPerPageWinners = 10;
 let currentPageGarage = 1;
 let currentPageWinners = 1;
 
+let currentWinnersArr = [];
+let raceStartedFlag = false;
+
 function getNavigationMenu() {
     const fragmentNavigationMenu = document.createDocumentFragment();
 
@@ -465,6 +468,12 @@ async function startCarEngineHandler(event) {
         },
     );
 
+    let currentWinner = {
+        id: carId,
+        wins: '',
+        time: time,
+    };
+
     currentStartBtn.classList.add('disable');
     // setTimeout(() => currentStartBtn.classList.remove('disable'), time);
     currentStopBtn.classList.remove('disable');
@@ -472,9 +481,58 @@ async function startCarEngineHandler(event) {
 
     try {
         await ServerRequest.switchtoDriveMode(carId);
+        currentWinnersArr.push(currentWinner);
+        if (currentWinnersArr.length === 1) {
+            let winnerId = currentWinnersArr[0].id;
+            let winnerTime = currentWinnersArr[0].time;
+            if (raceStartedFlag) {
+                processRaceWinner(winnerId, winnerTime);
+            }
+        }
     } catch {
         carAnimation.pause();
+        processBrokenCar(carId);
     }
+    // console.log('startCarEngineBtn', currentWinnersArr);
+}
+
+async function processBrokenCar(carId) {
+    let spanWinnerMessage = document.createElement('span');
+    spanWinnerMessage.className = 'race-info';
+    spanWinnerMessage.setAttribute(
+        'style',
+        'font-weight:700; color: var(--brocken-car); text-shadow: 2px 2px 8px rgb(168 183 184)',
+    );
+    spanWinnerMessage.innerHTML = `&nbsp;&nbsp;&nbsp;&nbsp;Oops! Some problem with the car!`;
+    document
+        .getElementById(carId)
+        .getElementsByClassName('block-nav')[0]
+        .append(spanWinnerMessage);
+}
+
+async function processRaceWinner(winnerId, winnerTime) {
+    await showWinnerResultInGarage(winnerId, winnerTime);
+
+    function showWinnerResultInTable(winnerId, winnerTime) {}
+}
+
+async function showWinnerResultInGarage(winnerId, winnerTime) {
+    let trackBlock = document.getElementById(winnerId);
+    trackBlock.style.backgroundColor = 'var(--winner-color)';
+
+    let spanWinnerMessage = document.createElement('span');
+    spanWinnerMessage.className = 'race-info';
+    spanWinnerMessage.setAttribute(
+        'style',
+        'font-weight:700; color: var(--yellow); text-shadow: 2px 2px 8px rgb(168 183 184)',
+    );
+    spanWinnerMessage.innerHTML = `&nbsp;&nbsp;&nbsp;&nbsp;Winner! ${Math.floor(
+        winnerTime,
+    )}ms`;
+    document
+        .getElementById(winnerId)
+        .getElementsByClassName('block-nav')[0]
+        .append(spanWinnerMessage);
 }
 
 async function stopCarEngineHandler(event) {
@@ -512,6 +570,10 @@ async function stopCarEngineHandler(event) {
     }
 
     await ServerRequest.stopCarEngine(carId);
+
+    // Reset array after stop button clicking
+    currentWinnersArr = [];
+    await resetInfoAfterRace();
 }
 
 function createCarIcon(color) {
@@ -680,6 +742,7 @@ let raceBtn = document.getElementsByClassName('race')[0];
 raceBtn.addEventListener('click', raceLaunchHandler);
 
 async function raceLaunchHandler(event) {
+    raceStartedFlag = true;
     let resetBtn = document.getElementsByClassName('reset')[0];
 
     if (event.currentTarget.classList.contains('disable')) {
@@ -699,6 +762,7 @@ let resetBtn = document.getElementsByClassName('reset')[0];
 resetBtn.addEventListener('click', raceResetHandler);
 
 async function raceResetHandler(event) {
+    raceStartedFlag = false;
     let raceBtn = document.getElementsByClassName('race')[0];
 
     if (event.currentTarget.classList.contains('disable')) {
@@ -708,8 +772,19 @@ async function raceResetHandler(event) {
     let allStopBtns = document.querySelectorAll('.button-stop');
     allStopBtns.forEach((elem) => elem.click());
 
+    // await resetInfoAfterRace();
+
     raceBtn.classList.remove('disable');
     event.currentTarget.classList.add('disable');
+}
+
+async function resetInfoAfterRace() {
+    let allInfoSpans = [...document.getElementsByClassName('race-info')];
+    allInfoSpans.forEach((elem) => elem.remove());
+    let allTrackBlocks = [...document.getElementsByClassName('track-block')];
+    allTrackBlocks.forEach(
+        (elem) => (elem.style.backgroundColor = 'var(--black)'),
+    );
 }
 /*//All car race reseting by clicking RESET btn in Garage view*/
 

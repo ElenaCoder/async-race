@@ -129,7 +129,7 @@ class ServerRequest {
         return response.json();
     }
 
-    static async createWinner(id, wins, time) {
+    static async createWinner(id, wins=0, time) {
         let urlStr = serverURL + 'garage';
         let bodyStr = JSON.stringify({
             id: `${id}`,
