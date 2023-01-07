@@ -512,8 +512,7 @@ async function processBrokenCar(carId) {
 
 async function processRaceWinner(winnerId, winnerTime) {
     await showWinnerResultInGarage(winnerId, winnerTime);
-
-    function showWinnerResultInTable(winnerId, winnerTime) {}
+    await showWinnerResultInTable(winnerId, winnerTime);
 }
 
 async function showWinnerResultInGarage(winnerId, winnerTime) {
@@ -533,6 +532,36 @@ async function showWinnerResultInGarage(winnerId, winnerTime) {
         .getElementById(winnerId)
         .getElementsByClassName('block-nav')[0]
         .append(spanWinnerMessage);
+}
+
+async function showWinnerResultInTable(winnerId, winnerTime) {
+    let isCurrentWinnerInWinnerTable = await isInWinnersTable(winnerId);
+    if (isCurrentWinnerInWinnerTable) {
+        let response = await ServerRequest.getWinner(winnerId);
+        let oldWins = await response.wins;
+        let oldBestTime = await response.time;
+        let newWins = +oldWins + 1;
+        let newBestTime =
+            winnerTime < oldBestTime ? winnerTime : oldBestTime;
+        await ServerRequest.updateWinner(winnerId, newWins, Math.floor(newBestTime));
+    } else {
+        let wins = 1;
+        await ServerRequest.createWinner(winnerId, wins, Math.floor(winnerTime));
+    }
+}
+
+async function isInWinnersTable(currentWinner) {
+    let answer = false;
+    let winsResponse = await ServerRequest.getWinners();
+    let winnersArr = await winsResponse.data;
+    if (winnersArr.length !== 0) {
+        for (let elem of winnersArr) {
+            if (elem.id == currentWinner) {
+                answer = true;
+            }
+        }
+    }
+    return answer;
 }
 
 async function stopCarEngineHandler(event) {
