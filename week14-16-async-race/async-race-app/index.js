@@ -747,6 +747,8 @@ async function createNewCarHandler(event) {
         await ServerRequest.createCar(newCarName, newCarColor);
         renderCarsInGarage();
     }
+    formCreate.getElementsByClassName('input-text')[0].value = '';
+    formCreate.getElementsByClassName('input-color')[0].value  = '#bbbbbb';
 }
 /*//Car creating by clicking button CREATE in Garage view*/
 
@@ -773,6 +775,8 @@ async function updateSelectedCarHandler(event) {
             currentCarColor,
         );
         renderCarsInGarage();
+        document.getElementsByClassName('input-text')[1].value = '';
+        document.getElementsByClassName('input-color')[1].value  = '#bbbbbb';
     } else {
         alert('Please select the car you want to update.');
     }
