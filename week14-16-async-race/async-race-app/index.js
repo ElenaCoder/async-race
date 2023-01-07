@@ -11,6 +11,12 @@ let currentPageWinners = 1;
 let currentWinnersArr = [];
 let raceStartedFlag = false;
 
+//'id'|'wins'|'time'
+let sortParameter = 'id';
+
+//'ASC'|'DESC'
+let orderParameter = 'ASC';
+
 function getNavigationMenu() {
     const fragmentNavigationMenu = document.createDocumentFragment();
 
@@ -541,12 +547,19 @@ async function showWinnerResultInTable(winnerId, winnerTime) {
         let oldWins = await response.wins;
         let oldBestTime = await response.time;
         let newWins = +oldWins + 1;
-        let newBestTime =
-            winnerTime < oldBestTime ? winnerTime : oldBestTime;
-        await ServerRequest.updateWinner(winnerId, newWins, Math.floor(newBestTime));
+        let newBestTime = winnerTime < oldBestTime ? winnerTime : oldBestTime;
+        await ServerRequest.updateWinner(
+            winnerId,
+            newWins,
+            Math.floor(newBestTime),
+        );
     } else {
         let wins = 1;
-        await ServerRequest.createWinner(winnerId, wins, Math.floor(winnerTime));
+        await ServerRequest.createWinner(
+            winnerId,
+            wins,
+            Math.floor(winnerTime),
+        );
     }
 }
 
@@ -895,12 +908,54 @@ function getTableOfWinners() {
     thWins.innerHTML = 'Wins';
     tr.append(thWins);
 
+    let thWinsSpan = document.createElement('span');
+    thWinsSpan.className = 'wins-arrow'
+    thWins.append(thWinsSpan);
+
+    thWins.addEventListener('click', sortByWinsHandler);
+
     let thBestTime = document.createElement('th');
     thBestTime.className = 'th-BestTime';
     thBestTime.innerHTML = 'BestTime';
     tr.append(thBestTime);
 
+    let thBestTimeSpan = document.createElement('span');
+    thBestTimeSpan.className = 'bestTime-arrow'
+    thBestTime.append(thBestTimeSpan);
+
+    thBestTime.addEventListener('click', sortByBestTimesHandler);
+
     return fragmentTableOfWinners;
+}
+
+async function sortByWinsHandler(event) {
+    let span = event.currentTarget.getElementsByClassName('wins-arrow')[0];
+    document.getElementsByClassName('bestTime-arrow')[0].innerHTML = '';
+
+    if(orderParameter == 'ASC'){
+        orderParameter = 'DESC';
+        span.innerHTML = '&nbsp;&#8593;';
+        await renderWinnersInTable('wins', 'ASC');
+    } else {
+        orderParameter = 'ASC';
+        span.innerHTML = '&nbsp;&#8595;';
+        await renderWinnersInTable('wins', 'DESC');
+    }
+}
+
+async function sortByBestTimesHandler(event) {
+    let span = event.currentTarget.getElementsByClassName('bestTime-arrow')[0];
+    document.getElementsByClassName('wins-arrow')[0].innerHTML = '';
+
+    if(orderParameter == 'ASC'){
+        orderParameter = 'DESC';
+        span.innerHTML = '&nbsp;&#8593;';
+        await renderWinnersInTable('time', 'ASC');
+    } else {
+        orderParameter = 'ASC';
+        span.innerHTML = '&nbsp;&#8595;';
+        await renderWinnersInTable('time', 'DESC');
+    }
 }
 
 let tableOfWinnersFragment = getTableOfWinners();
@@ -915,7 +970,7 @@ document
 
 /*WINNNERS VIEW - RENDERING */
 /*Car rendering in Winners view from DB*/
-async function renderWinnersInTable() {
+async function renderWinnersInTable(sort, order) {
     let winnersRows = document.getElementsByClassName('tr-row');
     while (winnersRows.length > 0) {
         winnersRows[0].parentNode.removeChild(winnersRows[0]);
@@ -924,6 +979,8 @@ async function renderWinnersInTable() {
     let winnersInTable = await ServerRequest.getWinners(
         currentPageWinners,
         carsNumberPerPageWinners,
+        sort,
+        order,
     );
     let winnersInTableArr = await winnersInTable.data;
     let pagesQuantity = Math.ceil(
@@ -1013,6 +1070,6 @@ btnToWinners.addEventListener('click', () => {
             .classList.remove('hide');
     }
     document.getElementsByClassName('garage-content')[0].classList.add('hide');
-    renderWinnersInTable();
+    renderWinnersInTable(sortParameter,orderParameter);
 });
 /*//Toggling between GARAGE and WINNERS views*/
