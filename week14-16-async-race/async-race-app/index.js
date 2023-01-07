@@ -1074,6 +1074,9 @@ btnToWinners.addEventListener('click', () => {
             .classList.remove('hide');
     }
     document.getElementsByClassName('garage-content')[0].classList.add('hide');
+    let resetBtn = document.getElementsByClassName('reset')[0];
+    resetBtn.click();
     renderWinnersInTable(sortParameter,orderParameter);
+
 });
 /*//Toggling between GARAGE and WINNERS views*/
