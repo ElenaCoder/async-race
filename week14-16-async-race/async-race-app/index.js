@@ -356,94 +356,104 @@ async function renderCarsInGarage() {
     let fragmentCarsBlock = document.createDocumentFragment();
 
     carsInGarageArr.forEach((elem) => {
-        let divCarBlock = document.createElement('div');
-        divCarBlock.className = 'track-block';
-        divCarBlock.id = `${elem.id}`;
-        fragmentCarsBlock.append(divCarBlock);
-
-        function createNavigationInCarBlockFragment(elem, node) {
-            let divBlockNavigation = document.createElement('div');
-            divBlockNavigation.className = 'block-nav';
-            node.append(divBlockNavigation);
-
-            let btnSelect = document.createElement('div');
-            btnSelect.className = 'select button gray';
-            let linkSelect = document.createElement('a');
-            linkSelect.className = 'button-select';
-            linkSelect.setAttribute('href', '#');
-            linkSelect.innerHTML = 'select';
-            btnSelect.append(linkSelect);
-            divBlockNavigation.append(btnSelect);
-
-            let btnRemove = document.createElement('div');
-            btnRemove.className = 'remove button gray';
-            let linkRemove = document.createElement('a');
-            linkRemove.className = 'button-remove';
-            linkRemove.setAttribute('href', '#');
-            linkRemove.innerHTML = 'remove';
-            btnRemove.append(linkRemove);
-            divBlockNavigation.append(btnRemove);
-
-            let carName = document.createElement('div');
-            carName.className = 'car-name';
-            carName.innerHTML = `${elem.name}`;
-            divBlockNavigation.append(carName);
-
-            let divBlockControlPanel = document.createElement('div');
-            divBlockControlPanel.className = 'control-panel';
-            node.append(divBlockControlPanel);
-
-            let btnStart = document.createElement('div');
-            btnStart.className = 'button yellow small';
-            let linkStart = document.createElement('a');
-            linkStart.className = 'button-start';
-            linkStart.setAttribute('href', '#');
-            linkStart.innerHTML = '&#10148;';
-            btnStart.prepend(linkStart);
-            divBlockControlPanel.append(btnStart);
-
-            btnStart.addEventListener('click', startCarEngineHandler);
-
-            let btnStop = document.createElement('div');
-            btnStop.className = 'button yellow small disable';
-            let linkStop = document.createElement('a');
-            linkStop.className = 'button-stop';
-            linkStop.setAttribute('href', '#');
-            linkStop.innerHTML = '&#9724;';
-            btnStop.prepend(linkStop);
-            divBlockControlPanel.append(btnStop);
-
-            btnStop.addEventListener('click', stopCarEngineHandler);
-        }
-        createNavigationInCarBlockFragment(elem, divCarBlock);
-
-        function createCarTrack(elem, node) {
-            let divBlockCarTrack = document.createElement('div');
-            divBlockCarTrack.className = 'car-track';
-            node.append(divBlockCarTrack);
-
-            let carIcon = createCarIcon(elem.color);
-            divBlockCarTrack.append(carIcon);
-
-            let flagIcon = document.createElement('img');
-            flagIcon.className = 'flag-image';
-            flagIcon.style.color = `${elem.color}`;
-            flagIcon.setAttribute('src', './asset/flag.svg');
-            flagIcon.setAttribute('alt', 'Flag image');
-            divBlockCarTrack.append(flagIcon);
-        }
-        createCarTrack(elem, divCarBlock);
-
-        let selectBtn = divCarBlock.getElementsByClassName('select button')[0];
-        let removeBtn = divCarBlock.getElementsByClassName('remove button')[0];
-        selectBtn.addEventListener('click', selectBtnClickHandling);
-        removeBtn.addEventListener('click', removetBtnClickHandling);
+        let fragmentCarBlock = createCarBlockFragment(elem);
+        fragmentCarsBlock.append(fragmentCarBlock);
     });
 
     document.getElementsByClassName('page-garage')[0].after(fragmentCarsBlock);
 }
 renderCarsInGarage();
 /*//Car rendering in Garage view from DB*/
+
+function createCarBlockFragment(elem){
+    let fragmentCarBlock = document.createDocumentFragment();
+
+    let divCarBlock = document.createElement('div');
+    divCarBlock.className = 'track-block';
+    divCarBlock.id = `${elem.id}`;
+    fragmentCarBlock.append(divCarBlock);
+
+    createNavigationInCarBlockFragment(elem, divCarBlock);
+    createCarTrack(elem, divCarBlock);
+
+    let selectBtn = divCarBlock.getElementsByClassName('select button')[0];
+    let removeBtn = divCarBlock.getElementsByClassName('remove button')[0];
+    selectBtn.addEventListener('click', selectBtnClickHandling);
+    removeBtn.addEventListener('click', removetBtnClickHandling);
+
+    return fragmentCarBlock;
+}
+
+function createNavigationInCarBlockFragment(elem, node) {
+    let divBlockNavigation = document.createElement('div');
+    divBlockNavigation.className = 'block-nav';
+    node.append(divBlockNavigation);
+
+    let btnSelect = document.createElement('div');
+    btnSelect.className = 'select button gray';
+    let linkSelect = document.createElement('a');
+    linkSelect.className = 'button-select';
+    linkSelect.setAttribute('href', '#');
+    linkSelect.innerHTML = 'select';
+    btnSelect.append(linkSelect);
+    divBlockNavigation.append(btnSelect);
+
+    let btnRemove = document.createElement('div');
+    btnRemove.className = 'remove button gray';
+    let linkRemove = document.createElement('a');
+    linkRemove.className = 'button-remove';
+    linkRemove.setAttribute('href', '#');
+    linkRemove.innerHTML = 'remove';
+    btnRemove.append(linkRemove);
+    divBlockNavigation.append(btnRemove);
+
+    let carName = document.createElement('div');
+    carName.className = 'car-name';
+    carName.innerHTML = `${elem.name}`;
+    divBlockNavigation.append(carName);
+
+    let divBlockControlPanel = document.createElement('div');
+    divBlockControlPanel.className = 'control-panel';
+    node.append(divBlockControlPanel);
+
+    let btnStart = document.createElement('div');
+    btnStart.className = 'button yellow small';
+    let linkStart = document.createElement('a');
+    linkStart.className = 'button-start';
+    linkStart.setAttribute('href', '#');
+    linkStart.innerHTML = '&#10148;';
+    btnStart.prepend(linkStart);
+    divBlockControlPanel.append(btnStart);
+
+    btnStart.addEventListener('click', startCarEngineHandler);
+
+    let btnStop = document.createElement('div');
+    btnStop.className = 'button yellow small disable';
+    let linkStop = document.createElement('a');
+    linkStop.className = 'button-stop';
+    linkStop.setAttribute('href', '#');
+    linkStop.innerHTML = '&#9724;';
+    btnStop.prepend(linkStop);
+    divBlockControlPanel.append(btnStop);
+
+    btnStop.addEventListener('click', stopCarEngineHandler);
+}
+
+function createCarTrack(elem, node) {
+    let divBlockCarTrack = document.createElement('div');
+    divBlockCarTrack.className = 'car-track';
+    node.append(divBlockCarTrack);
+
+    let carIcon = createCarIcon(elem.color);
+    divBlockCarTrack.append(carIcon);
+
+    let flagIcon = document.createElement('img');
+    flagIcon.className = 'flag-image';
+    flagIcon.style.color = `${elem.color}`;
+    flagIcon.setAttribute('src', './asset/flag.svg');
+    flagIcon.setAttribute('alt', 'Flag image');
+    divBlockCarTrack.append(flagIcon);
+}
 
 async function startCarEngineHandler(event) {
     let carIconElem =
@@ -461,12 +471,10 @@ async function startCarEngineHandler(event) {
 
     let carAnimation = carIconElem.animate(
         [
-            // key frames
             { transform: 'translateX(0)' },
             { transform: 'translateX(82vw)' },
         ],
         {
-            // sync options
             duration: time,
             iterations: 1,
             easing: 'linear',
@@ -481,9 +489,7 @@ async function startCarEngineHandler(event) {
     };
 
     currentStartBtn.classList.add('disable');
-    // setTimeout(() => currentStartBtn.classList.remove('disable'), time);
     currentStopBtn.classList.remove('disable');
-    // setTimeout(() => currentStopBtn.classList.add('disable'), time);
 
     try {
         await ServerRequest.switchtoDriveMode(carId);
@@ -499,7 +505,6 @@ async function startCarEngineHandler(event) {
         carAnimation.pause();
         processBrokenCar(carId);
     }
-    // console.log('startCarEngineBtn', currentWinnersArr);
 }
 
 async function processBrokenCar(carId) {
