@@ -125,9 +125,9 @@ class ServerRequest {
   static async createWinner(id, wins, time) {
     const urlStr = `${serverURL}winners`;
     const bodyStr = JSON.stringify({
-      id: `${id}`,
-      wins: `${wins}`,
-      time: `${time}`,
+      id: id,
+      wins: wins,
+      time: time,
     });
     const response = await sendRequest(urlStr, 'POST', bodyStr);
     return response.json();
@@ -141,7 +141,7 @@ class ServerRequest {
 
   static async updateWinner(id, wins, time) {
     const urlStr = `${serverURL}winners/${id}`;
-    const bodyStr = JSON.stringify({ wins: `${wins}`, time: `${time}` });
+    const bodyStr = JSON.stringify({ wins: wins, time: time });
     const response = await sendRequest(urlStr, 'PUT', bodyStr);
     return response.json();
   }
