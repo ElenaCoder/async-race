@@ -1,4 +1,4 @@
-import ServerRequest from './serverRequest.js'; // eslint-disable-line
+import ServerRequest from './serverRequest.js';
 
 const carsNumberPerPageGarage = 7;
 const carsNumberPerPageWinners = 10;
@@ -155,8 +155,8 @@ async function isInWinnersTable(currentWinner) {
   const winsResponse = await ServerRequest.getWinners();
   const winnersArr = await winsResponse.data;
   if (winnersArr.length !== 0) {
-    for (let i = 0; i < winnersArr.length; i += 1) {
-      if (winnersArr[i].id === +currentWinner) {
+    for (const elem of winnersArr) {
+      if (elem.id === +currentWinner) {
         answer = true;
       }
     }
@@ -197,7 +197,7 @@ async function resetInfoAfterRace() {
   allInfoSpans.forEach((elem) => elem.remove());
   const allTrackBlocks = [...document.getElementsByClassName('track-block')];
   allTrackBlocks.forEach(
-    (elem) => (elem.style.backgroundColor = 'var(--black)'),  // eslint-disable-line
+    (elem) => (elem.style.backgroundColor = 'var(--black)'),
   );
 }
 
@@ -447,45 +447,6 @@ function createCarTrack(elem, node) {
   divBlockCarTrack.append(flagIcon);
 }
 
-function renderHighlightedTrackBlock(elem) {
-  const allTrackBlocks = document.getElementsByClassName('track-block');
-  Array.from(allTrackBlocks).forEach((el) => (el.classList.contains('selected')
-    ? el.classList.remove('selected')
-    : 1));
-  elem.parentNode.parentNode.classList.add('selected');
-}
-
-function selectBtnClickHandling(event) {
-  const selectBtn = event.currentTarget;
-  renderHighlightedTrackBlock(selectBtn);
-
-  const selectedCarName = selectBtn.parentNode.parentNode.getElementsByClassName('car-name')[0]
-    .innerHTML;
-  const selectedCarColor = selectBtn.parentNode.parentNode
-    .getElementsByTagName('path')[0]
-    .getAttribute('fill');
-
-  const inputUpdateNameElem = document.getElementsByClassName('input-text')[1];
-  inputUpdateNameElem.value = `${selectedCarName}`;
-  const inputUpdateNameColorElem = document.getElementsByClassName('input-color')[1];
-  inputUpdateNameColorElem.value = `${selectedCarColor}`;
-}
-
-async function removetBtnClickHandling(event) {
-  const removeBtn = event.currentTarget;
-  const carBlockElem = removeBtn.parentNode.parentNode;
-  const currentCarId = carBlockElem.getAttribute('id');
-
-  await ServerRequest.deleteCar(currentCarId);
-  try {
-    await ServerRequest.deleteWinner(currentCarId);
-  } catch {
-    console.log('No such car in Winners'); // eslint-disable-line
-  }
-
-  renderCarsInGarage(); // eslint-disable-line
-}
-
 function createCarBlockFragment(elem) {
   const fragmentCarBlock = document.createDocumentFragment();
 
@@ -496,6 +457,48 @@ function createCarBlockFragment(elem) {
 
   createNavigationInCarBlockFragment(elem, divCarBlock);
   createCarTrack(elem, divCarBlock);
+
+  /* selectBtnClickHandling callback */
+  function selectBtnClickHandling(event) {
+    const selectBtn = event.currentTarget;
+    function renderHighlightedTrackBlock(elem) {
+      const allTrackBlocks = document.getElementsByClassName('track-block');
+      Array.from(allTrackBlocks).forEach((el) => (el.classList.contains('selected')
+        ? el.classList.remove('selected')
+        : 1));
+      elem.parentNode.parentNode.classList.add('selected');
+    }
+    renderHighlightedTrackBlock(selectBtn);
+
+    const selectedCarName = selectBtn.parentNode.parentNode.getElementsByClassName('car-name')[0]
+      .innerHTML;
+    const selectedCarColor = selectBtn.parentNode.parentNode
+      .getElementsByTagName('path')[0]
+      .getAttribute('fill');
+
+    const inputUpdateNameElem = document.getElementsByClassName('input-text')[1];
+    inputUpdateNameElem.value = `${selectedCarName}`;
+    const inputUpdateNameColorElem = document.getElementsByClassName('input-color')[1];
+    inputUpdateNameColorElem.value = `${selectedCarColor}`;
+  }
+  /* //selectBtnClickHandling callback */
+
+  /* removetBtnClickHandling callback */
+  async function removetBtnClickHandling(event) {
+    const removeBtn = event.currentTarget;
+    const carBlockElem = removeBtn.parentNode.parentNode;
+    const currentCarId = carBlockElem.getAttribute('id');
+
+    await ServerRequest.deleteCar(currentCarId);
+    try {
+      await ServerRequest.deleteWinner(currentCarId);
+    } catch {
+      console.log('No such car in Winners');
+    }
+
+    renderCarsInGarage();
+  }
+  /* //removetBtnClickHandling callback */
 
   const selectBtn = divCarBlock.getElementsByClassName('select button')[0];
   const removeBtn = divCarBlock.getElementsByClassName('remove button')[0];
@@ -586,7 +589,7 @@ async function generateCarHandler() {
     const randomName = `${randomNamePart1} ${randomNamePart2}`;
     const randomColor = getRandomColor();
 
-    await ServerRequest.createCar(randomName, randomColor); // eslint-disable-line
+    await ServerRequest.createCar(randomName, randomColor);
   }
   renderCarsInGarage();
 }
@@ -704,7 +707,7 @@ async function renderWinnersInTable(sort, order) {
 
   for (let index = 0; index < winnersInTableArr.length; index += 1) {
     const elem = winnersInTableArr[index];
-    const currentCar = await ServerRequest.getCar(elem.id); // eslint-disable-line
+    const currentCar = await ServerRequest.getCar(elem.id);
 
     const carIcon = createCarIcon(currentCar.color);
 
@@ -803,6 +806,9 @@ document
 /* GARAGE VIEW - RENDERING */
 
 /* Car creating by clicking button CREATE in Garage view */
+const createBtn = document.getElementsByClassName('create')[0];
+createBtn.addEventListener('click', createNewCarHandler);
+
 async function createNewCarHandler() {
   const formCreate = document.getElementsByClassName('form-create')[0];
   const newCarName = formCreate.getElementsByClassName('input-text')[0].value;
@@ -815,12 +821,13 @@ async function createNewCarHandler() {
   formCreate.getElementsByClassName('input-text')[0].value = '';
   formCreate.getElementsByClassName('input-color')[0].value = '#bbbbbb';
 }
-
-const createBtn = document.getElementsByClassName('create')[0];
-createBtn.addEventListener('click', createNewCarHandler);
 /* //Car creating by clicking button CREATE in Garage view */
 
 /* Car updating by clicking button UPDATE in Garage view */
+
+const updateBtn = document.getElementsByClassName('update')[0];
+updateBtn.addEventListener('click', updateSelectedCarHandler);
+
 async function updateSelectedCarHandler() {
   if (document.getElementsByClassName('selected').length) {
     const currentCarId = document
@@ -840,12 +847,9 @@ async function updateSelectedCarHandler() {
     document.getElementsByClassName('input-text')[1].value = '';
     document.getElementsByClassName('input-color')[1].value = '#bbbbbb';
   } else {
-    alert('Please select the car you want to update.');  // eslint-disable-line
+    alert('Please select the car you want to update.');
   }
 }
-
-const updateBtn = document.getElementsByClassName('update')[0];
-updateBtn.addEventListener('click', updateSelectedCarHandler);
 /* //Car updating by clicking button UPDATE in Garage view */
 
 /* All car race launching by clicking RACE btn in Garage view */
@@ -871,6 +875,8 @@ raceBtn.addEventListener('click', raceLaunchHandler);
 /* All car race reseting by clicking RESET btn in Garage view */
 async function raceResetHandler(event) {
   raceStartedFlag = false;
+  const raceBtn = document.getElementsByClassName('race')[0];
+
   if (event.currentTarget.classList.contains('disable')) {
     return;
   }
@@ -926,36 +932,6 @@ const pageWinnersInfoFragment = getWinnersPageInfoFragment();
 document
   .getElementsByClassName('winners-content')[0]
   .append(pageWinnersInfoFragment);
-
-async function sortByWinsHandler(event) {
-  const span = event.currentTarget.getElementsByClassName('wins-arrow')[0];
-  document.getElementsByClassName('bestTime-arrow')[0].innerHTML = '';
-
-  if (orderParameter === 'ASC') {
-    orderParameter = 'DESC';
-    span.innerHTML = '&nbsp;&#8593;';
-    await renderWinnersInTable('wins', 'ASC');
-  } else {
-    orderParameter = 'ASC';
-    span.innerHTML = '&nbsp;&#8595;';
-    await renderWinnersInTable('wins', 'DESC');
-  }
-}
-
-async function sortByBestTimesHandler(event) {
-  const span = event.currentTarget.getElementsByClassName('bestTime-arrow')[0];
-  document.getElementsByClassName('wins-arrow')[0].innerHTML = '';
-
-  if (orderParameter === 'ASC') {
-    orderParameter = 'DESC';
-    span.innerHTML = '&nbsp;&#8593;';
-    await renderWinnersInTable('time', 'ASC');
-  } else {
-    orderParameter = 'ASC';
-    span.innerHTML = '&nbsp;&#8595;';
-    await renderWinnersInTable('time', 'DESC');
-  }
-}
 
 function getTableOfWinners() {
   const fragmentTableOfWinners = document.createDocumentFragment();
@@ -1016,6 +992,40 @@ function getTableOfWinners() {
   return fragmentTableOfWinners;
 }
 
+/* WINNNERS VIEW - RENDERING */
+
+/* //WINNNERS VIEW - RENDERING */
+
+async function sortByWinsHandler(event) {
+  const span = event.currentTarget.getElementsByClassName('wins-arrow')[0];
+  document.getElementsByClassName('bestTime-arrow')[0].innerHTML = '';
+
+  if (orderParameter === 'ASC') {
+    orderParameter = 'DESC';
+    span.innerHTML = '&nbsp;&#8593;';
+    await renderWinnersInTable('wins', 'ASC');
+  } else {
+    orderParameter = 'ASC';
+    span.innerHTML = '&nbsp;&#8595;';
+    await renderWinnersInTable('wins', 'DESC');
+  }
+}
+
+async function sortByBestTimesHandler(event) {
+  const span = event.currentTarget.getElementsByClassName('bestTime-arrow')[0];
+  document.getElementsByClassName('wins-arrow')[0].innerHTML = '';
+
+  if (orderParameter === 'ASC') {
+    orderParameter = 'DESC';
+    span.innerHTML = '&nbsp;&#8593;';
+    await renderWinnersInTable('time', 'ASC');
+  } else {
+    orderParameter = 'ASC';
+    span.innerHTML = '&nbsp;&#8595;';
+    await renderWinnersInTable('time', 'DESC');
+  }
+}
+
 const tableOfWinnersFragment = getTableOfWinners();
 document
   .getElementsByClassName('winners-content')[0]
@@ -1057,6 +1067,7 @@ btnToWinners.addEventListener('click', () => {
       .classList.remove('hide');
   }
   document.getElementsByClassName('garage-content')[0].classList.add('hide');
+  const resetBtn = document.getElementsByClassName('reset')[0];
   resetBtn.click();
   renderWinnersInTable(sortParameter, orderParameter);
 });
