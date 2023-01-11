@@ -857,6 +857,36 @@ async function raceLaunchHandler(event) {
     return;
   }
 
+  const toGarageBtn = document.getElementsByClassName('to-garage')[0];
+  const toWinnersBtn = document.getElementsByClassName('to-winners')[0];
+  // const createBtn = document.getElementsByClassName('create');
+  // const updateBtn = document.getElementsByClassName('update');
+  const generateCarsBtn = document.getElementsByClassName('generate-cars')[0];
+  const toPrevBtn = document.getElementsByClassName('to-prev')[0];
+  const toNextBtn = document.getElementsByClassName('to-next')[0];
+  const selectBtns = [...document.getElementsByClassName('select')];
+  const removeBtns = [...document.getElementsByClassName('remove')];
+
+  // prohibit all other actions while race on progress
+  toGarageBtn.classList.add('disable');
+  toGarageBtn.setAttribute('style', 'pointer-events:none');
+  toWinnersBtn.classList.add('disable');
+  toWinnersBtn.setAttribute('style', 'pointer-events:none');
+  createBtn.classList.add('disable');
+  createBtn.setAttribute('style', 'pointer-events:none');
+  updateBtn.classList.add('disable');
+  updateBtn.setAttribute('style', 'pointer-events:none');
+  generateCarsBtn.classList.add('disable');
+  generateCarsBtn.setAttribute('style', 'pointer-events:none');
+  toPrevBtn.classList.add('disable');
+  toPrevBtn.setAttribute('style', 'pointer-events:none');
+  toNextBtn.classList.add('disable');
+  toNextBtn.setAttribute('style', 'pointer-events:none');
+  selectBtns.forEach((elem) => { elem.classList.add('disable'); });
+  selectBtns.forEach((elem) => { elem.setAttribute('style', 'pointer-events:none'); });
+  removeBtns.forEach((elem) => { elem.classList.add('disable'); });
+  removeBtns.forEach((elem) => { elem.setAttribute('style', 'pointer-events:none'); });
+
   const allStartBtns = document.querySelectorAll('.button-start');
   allStartBtns.forEach((elem) => elem.click());
 
@@ -878,10 +908,38 @@ async function raceResetHandler(event) {
   const allStopBtns = document.querySelectorAll('.button-stop');
   allStopBtns.forEach((elem) => elem.click());
 
-  // await resetInfoAfterRace();
-
   raceBtn.classList.remove('disable');
   event.currentTarget.classList.add('disable');
+
+  const toGarageBtn = document.getElementsByClassName('to-garage')[0];
+  const toWinnersBtn = document.getElementsByClassName('to-winners')[0];
+  // const createBtn = document.getElementsByClassName('create');
+  // const updateBtn = document.getElementsByClassName('update');
+  const generateCarsBtn = document.getElementsByClassName('generate-cars')[0];
+  const toPrevBtn = document.getElementsByClassName('to-prev')[0];
+  const toNextBtn = document.getElementsByClassName('to-next')[0];
+  const selectBtns = [...document.getElementsByClassName('select')];
+  const removeBtns = [...document.getElementsByClassName('remove')];
+
+  // allow all actions after race is finished
+  toGarageBtn.classList.remove('disable');
+  toGarageBtn.setAttribute('style', '');
+  toWinnersBtn.classList.remove('disable');
+  toWinnersBtn.setAttribute('style', '');
+  createBtn.classList.remove('disable');
+  createBtn.setAttribute('style', '');
+  updateBtn.classList.remove('disable');
+  updateBtn.setAttribute('style', '');
+  generateCarsBtn.classList.remove('disable');
+  generateCarsBtn.setAttribute('style', '');
+  toPrevBtn.classList.remove('disable');
+  toPrevBtn.setAttribute('style', '');
+  toNextBtn.classList.remove('disable');
+  toNextBtn.setAttribute('style', '');
+  selectBtns.forEach((elem) => { elem.classList.remove('disable'); });
+  selectBtns.forEach((elem) => { elem.setAttribute('style', ''); });
+  removeBtns.forEach((elem) => { elem.classList.remove('disable'); });
+  removeBtns.forEach((elem) => { elem.setAttribute('style', ''); });
 }
 
 const resetBtn = document.getElementsByClassName('reset')[0];
