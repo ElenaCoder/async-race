@@ -156,12 +156,12 @@
 }
 
 th {
-    padding: 0.2rem 1rem;
+    padding: 0.2rem 0.6rem;
     border: 1px solid var(--white);
 }
 
 td{
-    padding: 0.2rem 2rem;
+    padding: 0.2rem 0.6rem;
     text-align: center;
 }
 
