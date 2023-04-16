@@ -1,4 +1,3 @@
-
 🔔 🔔 🔔
 ---
 ### Async-race project overview
@@ -14,7 +13,7 @@ This is Async-race project, which was completed during the study period at Rolli
 
 The project structure:
 
-**week14-16-async-race:**
-  - week14-16-async-race - initially provided the server-mock ([backend part](./async-race-api/))
+**async-race**
+  - async-race-api - initially provided the server-mock ([backend part](./async-race-api/))
   - async-race-app  - UI which was developed ([frondend part](./async-race-app/))
 ---
